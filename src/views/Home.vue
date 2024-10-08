@@ -142,7 +142,7 @@
     let option = {
       // backgroundColor: "#000",
       title: {
-        text: '“一带一路”沿线各省区市分析——上海',
+        text: '“一带一路”沿线各省区市分析——上海 ',
         subtext: '',
         left: '45%',
         top: '15',
