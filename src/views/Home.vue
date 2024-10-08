@@ -102,6 +102,7 @@
       'down_pd': [0, -20, -40, -60, -80, -100]
     }
 
+    // 判断比例选择对应颜色
     for (let n in data) {
       let bili = data[n]['value'];
       data[n]['name'] = data[n]['name'] + ' ' + bili + '%'
@@ -142,7 +143,7 @@
     let option = {
       // backgroundColor: "#000",
       title: {
-        text: '“一带一路”沿线各省区市分析——上海 ',
+        text: '“一带一路”沿线各省区市分析——上海',
         subtext: '',
         left: '45%',
         top: '15',
@@ -206,7 +207,7 @@
     <!--     <iframe frameborder="0" src="src/assets/js/index.html" style="width: 100%; height: 100%;z-index: -10"></iframe>-->
     <div class="container" ref="dataScreenRef">
       <el-row class="header">
-        <el-col >
+        <el-col>
           <div class="date">{{ currentDate + '&nbsp; &nbsp; &nbsp; ' + str }}</div>
           <div class="title">BOOL数据可视化大屏</div>
           <div class="light" @click="backIndex">X</div>
@@ -216,7 +217,9 @@
         <el-col :span="9">
           <el-row align="middle" class="left" :gutter="20">
             <el-col class="left-top">
-              <span class="title">左上</span>
+              <span class="title-box">
+
+              </span>
               <el-row justify="space-between" class="left-top-l" :gutter="2">
                 <el-col :span="12" id="left-top-left"></el-col>
                 <el-col :span="12">left-top-right</el-col>
@@ -269,12 +272,14 @@
           height: (@body-height / 2) - 5px;
           background-color:rebeccapurple;
           margin-bottom: 5px;
-          .title{
+          .title-box{
              color: white;
              font-weight: bold;
              text-align: left;
              display: block;
-             height: 24px;
+             height: 30px;
+             background-color:#646cff;
+
           }
           .left-top-l{
             height:@left-top-height;
