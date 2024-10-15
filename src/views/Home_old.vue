@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import {onMounted, ref, reactive, watch, nextTick} from "vue";
-  import {useRouter} from "vue-router";
+  import {onMounted, ref, reactive, watch, nextTick} from "vue";
+  import { useRouter } from "vue-router";
   import * as echarts from 'echarts';
   import { init } from 'echarts';
   import { ElMessage  } from 'element-plus'
   import type { TabsInstance } from 'element-plus'
   import { ArrowDown } from '@element-plus/icons-vue'
+  import { useStore } from 'vuex'
+  import {no} from "vuetify/locale";
+
+  const router = new useRouter();
+  const store = new useStore();
 
   // 获取当前时间
   const currentDate = ref('');
@@ -32,8 +37,17 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
     }
     // 初始化echarts
     const chart_dom1 = initChart();
-    initChart2();
+    // 切换
     // initChart3(); // 默认不执行
+    // echarts2 、 3 的状态
+    if(store.state.home_left_top_state != ""){
+      incomeTab.value = store.state.home_left_top_state;
+      if(incomeTab.value === 'left-top-min'){
+        initChart2();
+      }
+    }else{
+      initChart2();
+    }
 
     let dfs = [];
     let dss = [];
@@ -46,7 +60,8 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
       let fz = years[i].content.split('、')
       if (y%2 !== 0){
         document.getElementById("time-line-right-"+y).style.height = '50px'
-        document.getElementById("time-line-right-"+y).style.width = '300px'
+        document.getElementById("time-line-right-"+y).style.width = '360px'
+        document.getElementById("time-line-right-"+y).style.marginLeft = '-38px'
         if (fz.length > 0) {
           let dom = document.getElementById("time-line-right-" + y);
           let success_dom = dom.parentNode.parentNode.querySelector('.content');
@@ -62,7 +77,9 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
         initChart4(y,dfs,dss);
       }else{
         document.getElementById("time-line-right-"+y).style.height = '50px'
-        document.getElementById("time-line-right-"+y).style.width = '300px'
+        document.getElementById("time-line-right-"+y).style.width = '360px'
+        document.getElementById("time-line-right-"+y).style.marginRight = '-38px'
+
         if (fz.length > 0) {
           let dom = document.getElementById("time-line-right-" + y);
           let success_dom = dom.parentNode.parentNode.querySelector('.content');
@@ -88,21 +105,19 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
       if(params.componentType === 'series'){
         //获取节点id
         var nodeId = params.data.id;
-        ElMessage(`click on item ${nodeId}`)
+        var nodeName = params.data.name;
+        nodeName = nodeName.split(' ')[0];
+        // this.$ElMessage(`click on item ${nodeId}`)
         //根据节点id进行相应的操作
         //例如跳转到对应的页面或弹出对应的提示信息
+        store.commit('set_incomeItem', {id:nodeId, title:nodeName})
+        router.push({path: '/incomeItem'})
       }
     });
 
-    // 左下角按钮悬停  // 鼠标悬停 & 鼠标离开
-    // const lb_c_dom = document.querySelector('.lblb-l .el-radio-group .el-radio-button__inner');
-    // for(let index in lb_c_dom){
-    //   lb_c_dom[index].addListener('mousecenter',function (e) {
-    //
-    //   })
-    // }
-
     category_tab(change_card_data,categoryTab.value,riskTab.value)
+    // 设置事件
+    categoryTab_event();
   });
 
   // 监听浏览器 resize 事件
@@ -110,7 +125,7 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
     // if (dataScreenRef.value) {
     //   dataScreenRef.value.style.transform = `scale(${getScale()}) translate(-50%, -50%)`;
     // }
-    // 使用了 scale 的echarts其实不需要需要重新计算缩放比例
+    // // 使用了 scale 的echarts其实不需要需要重新计算缩放比例
     // Object.values(dataScreen).forEach(chart => {
     //   chart && chart.resize();
     // });
@@ -664,6 +679,9 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
         }
       },
       barWidth: 15,
+      grid: {
+        left: '3%',
+      },
       xAxis: {
         type: 'value',
         show: false,
@@ -787,6 +805,9 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
         }
       },
       barWidth: 15,
+      grid: {
+        right: '3%',
+      },
       xAxis: {
         type: 'value',
         position: 'right',
@@ -903,8 +924,10 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
 
   // 费种、市州 .title-right-end
   const incomeTab = ref<TabsInstance['incomeTab']>('left-top-min');
+
   let incomeTab_active_dom :unknown = '';
   // 监听
+  let echarts3 = false;
   watch(incomeTab, (newValue, oldValue) => {
     if (incomeTab_active_dom){
       incomeTab_active_dom.clear()
@@ -912,8 +935,17 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
     nextTick(() => {  // dom更新之后再进行回调
       if (newValue === 'left-top-min'){
         incomeTab_active_dom = initChart2();
+        store.commit('set_home_left_top_state',{home_left_top_state: newValue})
       }else{
-        incomeTab_active_dom = initChart3();
+        incomeTab_active_dom = initChart3()
+        store.commit('set_home_left_top_state',{home_left_top_state: newValue})
+        if (!echarts3){
+          incomeTab_active_dom.on("click", function (e) {
+            store.commit('set_title',{title: e.name})
+            router.push({path: '/incomeArea'})
+          });
+        }
+       echarts3=true;
       }
     })
   });
@@ -933,17 +965,34 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
   let item_data : {[key :string] : object} = {
     'one': {'d':[1, 2, 3, 4, 5, 6],'c':[1, 2, 3, 4,5]},
     'two': {'d':[11,22,33,44,55,66],'c':[11,22,33,44,55]},
-    'three':{'d':[111,222,333,444,555,666],'c':[111,222,333,444,555]}
+    'three':{'d':[111,222,333,444,555,666],'c':[111,222,333,444,555]},
+    'four':{'d':[1111,2222,3333,4444,5555,6666],'c':[1111,2222,3333,4444,5555]}
   }
 
   // 左下角显示的数据（按市州）
   let area_data : {[key :string] : object} = {
     'one': {'d':[10, 20, 30, 40, 50, 60],'c':[10, 20, 30, 40,50]},
     'two': {'d':[110,220,330,440,550,660],'c':[110,220,330,440,550]},
-    'three':{'d':[1110,2220,3330,4440,5550,6660],'c':[1110,2220,3330,4440,5550]}
+    'three':{'d':[1110,2220,3330,4440,5550,6660],'c':[1110,2220,3330,4440,5550]},
+    'four':{'d':[11110,22220,33330,44440,55550,66660],'c':[11110,22220,33330,44440,55550]},
+    'five':{'d':[11111,22222,33333,44444,55555,66666],'c':[11111,22222,33333,44444,55555]},
+    'six':{'d':[111111,222222,333333,444444,555555,666666],'c':[111111,222222,333333,444444,555555]},
+    'seven':{'d':[111,222,333,444,555,666],'c':[110,220,330,440,550]},
+    'eight':{'d':[1111111,2222222,3333333,4444444,5555555,6666666],'c':[1111111,2222222,3333333,4444444,5555555]},
+    'nine':{'d':[11111111,22222222,33333333,44444444,55555555,66666666],'c':[11111111,22222222,33333333,4444444,555555]},
+    'ten':{'d':[1111,2222,444,4443,4322,3244],'c':[234,324,235,65,234]},
+    'eleven':{'d':[111111111,222222222,333333333,444444444,555555555,666666666],'c':[111111111,222222222,33333333,444,4445]},
+    'twelve':{'d':[1111111111,2222222222,3333333333,4444444444,5555555555,6666666666],'c':[1111111111,2222222222,34,32,24]},
+    'thirteen':{'d':[11111111111,22222222222,33333333333,44444444444,55555555555,66666666666],'c':[11111111111,222,342,234,43]},
+    'fourteen':{'d':[111111111111,222222222222,333333333333,444444444444,555555555555,666666666666],'c':[1111111111,34,234,23,2]},
+    'fifteen':{'d':[1111111111111111,234,325,252,234,24],'c':[32476,68,967,96,69]}
   }
 
+
   change_card_data = item_data;
+  // 定时器
+  let category_tab_time = null;
+  let category_time_params = [];
 
   const riskTab = ref<TabsInstance['riskTab']>('item-card');
   let risk_change_id : unknown = '';
@@ -951,8 +1000,10 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
   watch(riskTab, (newValue, oldValue) => {
     if (risk_change_id !== ''){
       document.querySelector('#'+risk_change_id+' #'+risk_change_id+'-div').style.display = 'none';
+      document.querySelector('.lblb-l #'+risk_change_id+'-category').setAttribute('style','display: none !important')
     }else{
       document.querySelector('#item-card #item-card-div').style.display = 'none';
+      document.querySelector('.lblb-l #item-card-category').setAttribute('style','display: none !important')
     }
     risk_change_id = newValue;
     if (newValue === 'item-card'){
@@ -960,9 +1011,39 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
     }else{
       change_card_data = area_data;
     }
+    store.commit('set_home_left_button_state', {home_left_button_state: newValue})
     nextTick(() => {  // dom更新之后再进行回调
       document.querySelector('#'+risk_change_id+' #'+risk_change_id+'-div').style.display = '';
+      document.querySelector('.lblb-l #'+risk_change_id+'-category').setAttribute('style',"display: ''")
+
+      clearInterval(category_tab_time)
+      category_time_params = [];
+
       category_tab(change_card_data,categoryTab.value, risk_change_id)
+      categoryTab.value = 'one'; // 每次切换都会回到原点
+
+      category_tab_time = setInterval(() => {
+        // 重置 tab
+        if (Object.keys(change_card_data).length === 0){
+          clearInterval(category_tab_time)
+        }
+        if (category_time_params.length === 0){
+          category_time_params = Object.keys(change_card_data);
+        }
+
+        let index = category_time_params.indexOf(categoryTab.value);
+
+        if (index !== category_time_params.length - 1) {
+          index += 1;
+        } else {
+          index = 0
+        }
+
+        categoryTab.value = category_time_params[index];
+      }, 1000);
+
+      // 设置事件
+      categoryTab_event();
     })
   });
 
@@ -992,9 +1073,8 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
     }
   }
 
-  // 定时每三秒轮播
-  let category_time_params = [];
-  const category_tab_time = setInterval(() => {
+  // 定时每 4 秒轮播
+  category_tab_time = setInterval(() => {
     // 重置 tab
     if (Object.keys(change_card_data).length === 0){
       clearInterval(category_tab_time)
@@ -1012,7 +1092,39 @@ import {onMounted, ref, reactive, watch, nextTick} from "vue";
     }
 
     categoryTab.value = category_time_params[index];
-  }, 3000);
+  }, 1000);
+
+  // 事件
+  function categoryTab_event() {
+    // 左下角按钮悬停  // 鼠标悬停 & 鼠标离开
+    let lb_c_dom: unknown = null;
+    if (risk_change_id !== '') {
+      lb_c_dom = document.querySelector('.lblb-l #' + risk_change_id + '-category .el-radio-group');
+    } else {
+      lb_c_dom = document.querySelector('.lblb-l #item-card-category .el-radio-group');
+    }
+
+    for (let i = 0; i < lb_c_dom.children.length; i++) {
+      lb_c_dom.children[i].addEventListener('mouseover', function (e) {
+
+      })
+
+      lb_c_dom.children[i].addEventListener('mouseout', function (e) {
+
+      })
+
+      lb_c_dom.children[i].addEventListener('click', function (e) {
+        let title = lb_c_dom.children[i].querySelector('.el-radio-button__inner').textContent;
+        store.commit('set_title', {title: title});
+
+        if (risk_change_id == 'area-card') {
+          router.push('/riskArea')
+        } else {
+          router.push('/riskItem')
+        }
+      })
+    }
+  }
 
   // 时间线
 const years = [
@@ -1151,56 +1263,35 @@ const years = [
                 </div>
                 <el-row justify="space-between" class="left-button-l" >
                     <el-col :span="9">
-                      <el-row class="left-button-left-top">
-                        <el-col :span="12" class="lblt-l">
-                          <el-dropdown @command="handleCommandItem" size="small">
-                        <span class="el-dropdown-link">
-                          按项目查看<el-icon class="el-icon--right"><arrow-down/></el-icon>
-                        </span>
-                            <template #dropdown>
-                              <el-dropdown-menu class="handler-item">
-                                <el-dropdown-item command="项目一">项目一</el-dropdown-item>
-                                <el-dropdown-item command="项目二">项目二</el-dropdown-item>
-                                <el-dropdown-item command="项目三">项目三</el-dropdown-item>
-                                <el-dropdown-item command="项目三">项目四</el-dropdown-item>
-                              </el-dropdown-menu>
-                            </template>
-                          </el-dropdown>
-                        </el-col>
-                        <el-col :span="12" class="lblt-r">
-                          <el-dropdown @command="handleCommandArea" size="small">
-                        <span class="el-dropdown-link">
-                          按市州查看<el-icon class="el-icon--right"><arrow-down /></el-icon>
-                        </span>
-                            <template #dropdown>
-                              <el-dropdown-menu class="handler-area">
-                                <el-dropdown-item command="长沙市">长沙市</el-dropdown-item>
-                                <el-dropdown-item command="株洲市">株洲市</el-dropdown-item>
-                                <el-dropdown-item command="湘潭市">湘潭市</el-dropdown-item>
-                                <el-dropdown-item command="长沙市">长沙市</el-dropdown-item>
-                                <el-dropdown-item command="株洲市">株洲市</el-dropdown-item>
-                                <el-dropdown-item command="湘潭市">湘潭市</el-dropdown-item>
-                                <el-dropdown-item command="长沙市">长沙市</el-dropdown-item>
-                                <el-dropdown-item command="株洲市">株洲市</el-dropdown-item>
-                                <el-dropdown-item command="湘潭市">湘潭市</el-dropdown-item>
-                                <el-dropdown-item command="长沙市">长沙市</el-dropdown-item>
-                                <el-dropdown-item command="株洲市">株洲市</el-dropdown-item>
-                                <el-dropdown-item command="湘潭市">湘潭市</el-dropdown-item>
-                                <el-dropdown-item command="长沙市">长沙市</el-dropdown-item>
-                                <el-dropdown-item command="株洲市">株洲市</el-dropdown-item>
-                                <el-dropdown-item command="湘潭市">湘潭市</el-dropdown-item>
-                              </el-dropdown-menu>
-                            </template>
-                          </el-dropdown>
-                        </el-col>
-                      </el-row>
                       <el-row class="left-button-left-button">
                         <el-col :span="10" class="lblb-l">
-                          <el-radio-group v-model="categoryTab" style="margin-bottom: 30px">
-                            <el-radio-button value="one">种类一</el-radio-button>
-                            <el-radio-button value="two">种类二</el-radio-button>
-                            <el-radio-button value="three">种类三</el-radio-button>
-                          </el-radio-group>
+                          <div id="item-card-category">
+                            <el-radio-group v-model="categoryTab" style="margin-bottom: 30px">
+                              <el-radio-button value="one">土地</el-radio-button>
+                              <el-radio-button value="two">矿产</el-radio-button>
+                              <el-radio-button value="three">基础</el-radio-button>
+                              <el-radio-button value="four">残保金</el-radio-button>
+                            </el-radio-group>
+                          </div>
+                          <div id="area-card-category" style="display: none">
+                            <el-radio-group v-model="categoryTab" style="margin-bottom: 30px;">
+                              <el-radio-button value="one">长沙市</el-radio-button>
+                              <el-radio-button value="two">岳阳市</el-radio-button>
+                              <el-radio-button value="three">常德市</el-radio-button>
+                              <el-radio-button value="four">衡阳市</el-radio-button>
+                              <el-radio-button value="five">株洲市</el-radio-button>
+                              <el-radio-button value="six">郴州市</el-radio-button>
+                              <el-radio-button value="seven">湘潭市</el-radio-button>
+                              <el-radio-button value="eight">邵阳市</el-radio-button>
+                              <el-radio-button value="nine">永州市</el-radio-button>
+                              <el-radio-button value="ten">益阳市</el-radio-button>
+                              <el-radio-button value="eleven">娄底市</el-radio-button>
+                              <el-radio-button value="twelve">怀化市</el-radio-button>
+                              <el-radio-button value="thirteen">湘西州</el-radio-button>
+                              <el-radio-button value="fourteen">张家界市</el-radio-button>
+                              <el-radio-button value="fifteen">湘江新区</el-radio-button>
+                            </el-radio-group>
+                          </div>
                         </el-col>
                         <el-col :span="14" class="lblb-r" :class="categoryTab">
                           <el-text class="title" type="warning">扫描数量</el-text>
@@ -1373,13 +1464,14 @@ const years = [
                             size="small"
                         >
                           <template v-slot:opposite>
-                            <div
-                                :class="`pt-1 headline font-weight-bold text-${year.color}`"
-                                v-text="year.year"
-                            ></div>
-                            <div :id="`time-line-right-${year.year}`">
+<!--                            <div-->
+<!--                                :class="`pt-1 headline font-weight-bold text-${year.color}`"-->
+<!--                                v-text="year.year"-->
+<!--                            ></div>-->
 
-                            </div>
+                              <div :id="`time-line-right-${year.year}`">
+
+                              </div>
                           </template>
                           <div>
                             <h2 :class="`mt-n1 headline font-weight-light mb-4 text-${year.color}`">
@@ -1694,7 +1786,7 @@ const years = [
                   font-weight: bold;
                 }
               }
-            }
+            //}
             .right-button-main{
               height: @body-height - 36px - 30px;
               overflow-y: auto;

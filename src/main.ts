@@ -13,6 +13,8 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
+// vuex store
+import store from './store'
 
 import './style.css'
 // @ts-ignore
@@ -39,4 +41,5 @@ app.use(echarts)
 app.use(ElementPlus)
 app.use(vuetify)
 app.use(router)
+app.use(store)
 app.mount('#app')
