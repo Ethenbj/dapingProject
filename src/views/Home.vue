@@ -5,7 +5,7 @@ import * as echarts from 'echarts';
 import { init } from 'echarts';
 import { ElMessage  } from 'element-plus'
 import type { TabsInstance } from 'element-plus'
-import { ArrowDown } from '@element-plus/icons-vue'
+import {ArrowDown, StarFilled} from '@element-plus/icons-vue'
 import { useStore } from 'vuex'
 import {no} from "vuetify/locale";
 
@@ -20,7 +20,7 @@ const str = ref('');
 const timeInterval = setInterval(() => {
   currentDate.value = new Date().toLocaleString()
   week.value = new Date().getDay();
-  str.value = "今天是星期" + a[week.value]
+  str.value = "星期" + a[week.value]
 }, 1000)
 
 // const loading = ref(true);
@@ -68,8 +68,15 @@ onMounted(() => {
         for (let t in fz) {
           let html_dom = document.createElement('p');
           html_dom.setAttribute('class', 'text-su')
-          html_dom.setAttribute('style', 'text-align:center; font-size: 12px;')
-          html_dom.innerText = fz[t];
+          html_dom.setAttribute('style', 'text-align:center; font-size: 12px;text-align:right;')
+          if (fz[t] !== '') {
+            if (y === '2018'){
+              html_dom.innerText = fz[t]+' *';
+            }else{
+              html_dom.innerText = fz[t]+' ·';
+            }
+          }
+
           success_dom.appendChild(html_dom)
         }
       }
@@ -86,8 +93,17 @@ onMounted(() => {
         for (let t in fz) {
           let html_dom = document.createElement('p');
           html_dom.setAttribute('class', 'text-su')
-          html_dom.setAttribute('style', 'text-align:center; font-size: 12px;')
-          html_dom.innerText = fz[t];
+          html_dom.setAttribute('style', 'text-align:center; font-size: 12px;text-align:left;')
+
+          if (fz[t] !== '') {
+            if (y === '2018'){
+              html_dom.innerText = '* '+ fz[t];
+            }else{
+              html_dom.innerText = '· '+ fz[t];
+            }
+          }
+
+
           success_dom.appendChild(html_dom)
         }
       }
@@ -106,8 +122,9 @@ onMounted(() => {
       //获取节点id
       var nodeId = params.data.id;
       var nodeName = params.data.name;
+
       nodeName = nodeName.split(' ')[0];
-      // this.$ElMessage(`click on item ${nodeId}`)
+      // ElMessage(`click on item ${nodeId}`)
       //根据节点id进行相应的操作
       //例如跳转到对应的页面或弹出对应的提示信息
       store.commit('set_incomeItem', {id:nodeId, title:nodeName})
@@ -172,7 +189,7 @@ function initChart(){
     "name": "水利建设基金"
   }, {
     "value": -100,
-    "name": "人防费"
+    "name": "人防工程异地建设费"
   }, {
     "value": 10,
     "name": "其他省级非税收入",
@@ -182,6 +199,9 @@ function initChart(){
   let color = {
     'up': ["#88aeff", "#709eff", "#598eff", "#417eff", "#296eff"],
     'down': ["#ce8cb0", "#c475a0", "#bb5e90", "#b14780", "#a73070"],
+
+    // 'up': ["#B3E5FC", "#81D4FA", "#4FC3F7", "#29B6F6", "#039BE5"],
+    // 'down': ["#FFCDD2", "#EF9A9A", "#E57373", "#EF5350", "#E53935"],
     'up_pd': [0, 20, 40, 60, 80, 100],
     'down_pd': [0, -20, -40, -60, -80, -100]
   }
@@ -290,7 +310,7 @@ function initChart2(){
 
 
   var xdata = ["教育费附加","地方教育附加","残疾人保障金","文化事业建设费","水利建设基金","工会经费","电力能源类","水土保持补偿费","排污权出让收入",
-    "人防费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
+    "人防工程异地建设费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
   var ydata  = [10,20,15,10,9,16,13,21,14,17,5,9,11,14,17,5,9,11,11];
   let option = {
     // backgroundColor: 'rgba(8, 16, 35, 1)',
@@ -416,13 +436,16 @@ function initChart3(){
   var thisYearData = ['', '', '', '', '', '', '', '', 1.4,2.1, 6.6, 7.9,3.4,3.4,2.1];
   var timeLineData = [1];
   let legend=['减少', '增长'];
-  var background = "rgba(8, 16, 35, 1)"; //背景
+  var background = "rgba(8, 16, 35, 0)"; //背景
   let textColor = "#fff";
   let lineColor="rgba(255,255,255,0.2)";
   let colors = [{
-    borderColor: "rgba(227,161,96,1)",
-    start: "rgba(227,161,96,0.8)",
-    end: "rgba(227,161,96,0.3)"
+    borderColor: "rgb(227,96,96)",
+    start: "rgba(227,96,96,0.8)",
+    end: "rgba(227,96,96,0.3)"
+
+    // 'down': ["", "#c475a0", "#bb5e90", "#b14780", "#a73070"],
+
   },
     {
       borderColor: "rgba(0,222,255,1)",
@@ -1003,10 +1026,10 @@ let risk_change_id : unknown = '';
 watch(riskTab, (newValue, oldValue) => {
   if (risk_change_id !== ''){
     document.querySelector('#'+risk_change_id+' #'+risk_change_id+'-div').style.display = 'none';
-    document.querySelector('.lblb-l #'+risk_change_id+'-category').setAttribute('style','display: none !important')
+    document.querySelector('#lblb-l #'+risk_change_id+'-category').setAttribute('style','display: none !important')
   }else{
     document.querySelector('#item-card #item-card-div').style.display = 'none';
-    document.querySelector('.lblb-l #item-card-category').setAttribute('style','display: none !important')
+    document.querySelector('#lblb-l #item-card-category').setAttribute('style','display: none !important')
   }
   risk_change_id = newValue;
   if (newValue === 'item-card'){
@@ -1017,7 +1040,7 @@ watch(riskTab, (newValue, oldValue) => {
   store.commit('set_home_left_button_state', {home_left_button_state: newValue})
   nextTick(() => {  // dom更新之后再进行回调
     document.querySelector('#'+risk_change_id+' #'+risk_change_id+'-div').style.display = '';
-    document.querySelector('.lblb-l #'+risk_change_id+'-category').setAttribute('style',"display: ''")
+    document.querySelector('#lblb-l #'+risk_change_id+'-category').setAttribute('style',"display: ''")
 
     clearInterval(category_tab_time)
     category_time_params = [];
@@ -1025,25 +1048,25 @@ watch(riskTab, (newValue, oldValue) => {
     category_tab(change_card_data,categoryTab.value, risk_change_id)
     categoryTab.value = 'one'; // 每次切换都会回到原点
 
-    category_tab_time = setInterval(() => {
-      // 重置 tab
-      if (Object.keys(change_card_data).length === 0){
-        clearInterval(category_tab_time)
-      }
-      if (category_time_params.length === 0){
-        category_time_params = Object.keys(change_card_data);
-      }
-
-      let index = category_time_params.indexOf(categoryTab.value);
-
-      if (index !== category_time_params.length - 1) {
-        index += 1;
-      } else {
-        index = 0
-      }
-
-      categoryTab.value = category_time_params[index];
-    }, 1000);
+    // category_tab_time = setInterval(() => {
+    //   // 重置 tab
+    //   if (Object.keys(change_card_data).length === 0){
+    //     clearInterval(category_tab_time)
+    //   }
+    //   if (category_time_params.length === 0){
+    //     category_time_params = Object.keys(change_card_data);
+    //   }
+    //
+    //   let index = category_time_params.indexOf(categoryTab.value);
+    //
+    //   if (index !== category_time_params.length - 1) {
+    //     index += 1;
+    //   } else {
+    //     index = 0
+    //   }
+    //
+    //   categoryTab.value = category_time_params[index];
+    // }, 1000);
 
     // 设置事件
     categoryTab_event();
@@ -1076,7 +1099,7 @@ function category_tab(data,categoryTab,divID){
   }
 }
 
-// 定时每 4 秒轮播
+// // 定时每 4 秒轮播
 // category_tab_time = setInterval(() => {
 //   // 重置 tab
 //   if (Object.keys(change_card_data).length === 0){
@@ -1095,21 +1118,21 @@ function category_tab(data,categoryTab,divID){
 //   }
 //
 //   categoryTab.value = category_time_params[index];
-// }, 1000);
+// }, 10000);
 
 // 事件
 function categoryTab_event() {
   // 左下角按钮悬停  // 鼠标悬停 & 鼠标离开
   let lb_c_dom: unknown = null;
   if (risk_change_id !== '') {
-    lb_c_dom = document.querySelector('.lblb-l #' + risk_change_id + '-category .el-radio-group');
+    lb_c_dom = document.querySelector('#lblb-l #' + risk_change_id + '-category .el-radio-group');
   } else {
-    lb_c_dom = document.querySelector('.lblb-l #item-card-category .el-radio-group');
+    lb_c_dom = document.querySelector('#lblb-l #item-card-category .el-radio-group');
   }
 
   for (let i = 0; i < lb_c_dom.children.length; i++) {
     lb_c_dom.children[i].addEventListener('mouseover', function (e) {
-
+        console.log(e)
     })
 
     lb_c_dom.children[i].addEventListener('mouseout', function (e) {
@@ -1132,7 +1155,6 @@ function categoryTab_event() {
 // 时间线
 const years = [
   {
-    color: 'cyan',
     year: '2018',
     title: '2018年度情况',
     content: '教育费附加、地方教育附加、残疾人就业保障金、水利建设基金、文化事业建设费、废弃电器电子产品处理基金、工会经费',
@@ -1140,7 +1162,6 @@ const years = [
     year_s_count: 5,
   },
   {
-    color: 'green',
     year: '2019',
     title: '2019年度情况',
     content: '农网还贷基金、可再生能源发展基金、国家重大水利工程建设基金、大中型水库移民后期扶持基金、跨省际大中型水库库区基金、括广告收入、河道砂石资源开采权出让收入',
@@ -1148,7 +1169,7 @@ const years = [
     year_s_count: 41,
   },
   {
-    color: 'pink',
+
     year: '2020',
     title: '2020年度情况',
     content: '',
@@ -1156,7 +1177,6 @@ const years = [
     year_s_count: 15,
   },
   {
-    color: 'amber',
     year: '2021',
     title: '2021年度情况',
     content: '水土保持补偿费、排污权出让收入、地方水库移民扶持基金、防空地下室易地建设费、土地闲置费、成真垃圾处理费、河道砂石经营收益、生态环境损害赔偿金',
@@ -1164,7 +1184,6 @@ const years = [
     year_s_count: 7,
   },
   {
-    color: 'orange',
     year: '2022',
     title: '2022年度情况',
     content: '国有土地使用权出让收入、矿产资源专项收入、国有资产占用费、土地及地面建筑资产处置、非土地及地面建筑资产处置、破损公路及设施赔(补)偿费和占用费、停车泊位和公共停车场有偿使用收入',
@@ -1172,7 +1191,6 @@ const years = [
     year_s_count: 35,
   },
   {
-    color: 'blue',
     year: '2023',
     title: '2023年度情况',
     content: '森林植被恢复费',
@@ -1180,7 +1198,6 @@ const years = [
     year_s_count: 7,
   },
   {
-    color: 'yellow',
     year: '2024',
     title: '2024年度情况',
     content: '',
@@ -1197,10 +1214,10 @@ const years = [
     <div class="container" ref="dataScreenRef">
       <div class="header">
         <div class="title">
-          数据可视化大屏
+          湖南省非税监管大屏
         </div>
         <div class="time">
-          {{ currentDate + '&nbsp; &nbsp; &nbsp; ' + str }}
+          {{ currentDate + ' ' + str }}
         </div>
       </div>
       <div class="body">
@@ -1244,14 +1261,23 @@ const years = [
               </div>
               <div class="change-btn">
                 <el-radio-group v-model="riskTab">
-                  <el-radio-button value="left-top-min">项目</el-radio-button>
-                  <el-radio-button value="left-top-right">市州</el-radio-button>
+                  <el-radio-button value="item-card">项目</el-radio-button>
+                  <el-radio-button value="area-card">市州</el-radio-button>
                 </el-radio-group>
               </div>
             </div>
             <div class="content-box">
-              <div class="left-bottom-left">
-                <div id="area-card-category" class="category" style="">
+              <div class="left-bottom-left" id="lblb-l">
+                <div id="item-card-category" class="category">
+                  <el-radio-group v-model="categoryTab">
+                    <el-radio-button value="one">土地出让收入</el-radio-button>
+                    <el-radio-button value="two">矿产资源专项收入</el-radio-button>
+                    <el-radio-button value="three">残疾人就业保障金</el-radio-button>
+                    <el-radio-button value="four">基础费种</el-radio-button>
+                  </el-radio-group>
+                </div>
+
+                <div id="area-card-category" class="category" style="display: none">
                   <el-radio-group v-model="categoryTab">
                     <el-radio-button value="one">长沙市</el-radio-button>
                     <el-radio-button value="two">岳阳市</el-radio-button>
@@ -1272,7 +1298,7 @@ const years = [
                 </div>
               </div>
               <div class="left-bottom-min">
-                <div class="lblb-r">
+                <div class="lblb-r" :class="categoryTab">
                   <div class="box">
                     <el-text class="title">扫描数量</el-text>
                     <el-text class="content c1">11</el-text>
@@ -1300,11 +1326,11 @@ const years = [
                   <div style="height: 100%" id="item-card-div">
                     <el-row class="left-button-right-button" :class="categoryTab">
                       <el-col :span="12" class="lbrb_left">
-                        <el-card class="card-1">
+                        <el-card class="card-1" >
                           <span>企业信息</span>
                           <div>
                             总入库&nbsp;&nbsp;
-                            <span class="count">1</span>
+                            <span class="count">1</span>&nbsp;<span>万元</span>
                           </div>
                         </el-card>
                         <el-row class="lbrb_lb">
@@ -1313,7 +1339,7 @@ const years = [
                               <span>上年纳税总金额</span>
                               <div>
                                 总入库&nbsp;&nbsp;
-                                <span class="count">2</span>
+                                <span class="count">2</span>&nbsp;<span>万元</span>
                               </div>
                             </el-card>
                           </el-col>
@@ -1322,7 +1348,7 @@ const years = [
                               <span>风险内容</span>
                               <div>
                                 总入库&nbsp;&nbsp;
-                                <span class="count">3</span>
+                                <span class="count">3</span>&nbsp;<span>万元</span>
                               </div>
                             </el-card>
                           </el-col>
@@ -1333,7 +1359,7 @@ const years = [
                           <span>本年已开票数</span>
                           <div>
                             总入库&nbsp;&nbsp;
-                            <span class="count">4</span>
+                            <span class="count">4</span>&nbsp;<span>万元</span>
                           </div>
                         </el-card>
                         <el-row class="lbrb_lb">
@@ -1342,7 +1368,7 @@ const years = [
                               <span>本年扫描疑点数</span>
                               <div>
                                 总入库&nbsp;&nbsp;
-                                <span class="count">5</span>
+                                <span class="count">5</span>&nbsp;<span>万元</span>
                               </div>
                             </el-card>
                           </el-col>
@@ -1351,7 +1377,7 @@ const years = [
                               <span>已下发疑点数</span>
                               <div>
                                 总入库&nbsp;&nbsp;
-                                <span class="count">6</span>
+                                <span class="count">6</span>&nbsp;<span>万元</span>
                               </div>
                             </el-card>
                           </el-col>
@@ -1366,7 +1392,7 @@ const years = [
                           <span>企业信息</span>
                           <div>
                             总入库&nbsp;&nbsp;
-                            <span class="count">1</span>
+                            <span class="count">1</span>&nbsp;<span>万元</span>
                           </div>
                         </el-card>
                         <el-row class="lbrb_lb">
@@ -1375,7 +1401,7 @@ const years = [
                               <span>企业信息</span>
                               <div>
                                 总入库&nbsp;&nbsp;
-                                <span class="count">1</span>
+                                <span class="count">1</span>&nbsp;<span>万元</span>
                               </div>
                             </el-card>
                           </el-col>
@@ -1384,7 +1410,7 @@ const years = [
                               <span>企业信息</span>
                               <div>
                                 总入库&nbsp;&nbsp;
-                                <span class="count">1</span>
+                                <span class="count">1</span>&nbsp;<span>万元</span>
                               </div>
                             </el-card>
                           </el-col>
@@ -1395,7 +1421,7 @@ const years = [
                           <span>企业信息</span>
                           <div>
                             总入库&nbsp;&nbsp;
-                            <span class="count">1</span>
+                            <span class="count">1</span>&nbsp;<span>万元</span>
                           </div>
                         </el-card>
                         <el-row class="lbrb_lb">
@@ -1404,7 +1430,7 @@ const years = [
                               <span>企业信息</span>
                               <div>
                                 总入库&nbsp;&nbsp;
-                                <span class="count">1</span>
+                                <span class="count">1</span>&nbsp;<span>万元</span>
                               </div>
                             </el-card>
                           </el-col>
@@ -1413,7 +1439,7 @@ const years = [
                               <span>企业信息</span>
                               <div>
                                 总入库&nbsp;&nbsp;
-                                <span class="count">1</span>
+                                <span class="count">1</span>&nbsp;<span>万元</span>
                               </div>
                             </el-card>
                           </el-col>
@@ -1436,11 +1462,11 @@ const years = [
             <div class="content">
               <el-row class="right-button-main">
                 <el-col :span="24">
-                  <v-timeline align="start" line-thickness="2" line-inset="1" truncate-line="start">
+                  <v-timeline align="start" line-thickness="2" line-inset="1">
                     <v-timeline-item
                         v-for="(year, i) in years"
                         :key="i"
-                        :dot-color="year.color"
+                        dot-color="#0091EA"
                         size="small"
                     >
                       <template v-slot:opposite>
@@ -1454,7 +1480,7 @@ const years = [
                         </div>
                       </template>
                       <div>
-                        <h2 :class="`mt-n1 headline font-weight-light mb-4 text-${year.color}`">
+                        <h2 :class="`mt-n1 headline font-weight-light mb-4 text-light-blue-accent-4`">
                           {{year.title}}
                         </h2>
                         <div>
@@ -1688,7 +1714,7 @@ const years = [
 
             .title {
               height: 100%;
-              font-size: 24px;
+              font-size: 30px;
               padding-left: 60px;
               display: flex;
               justify-content: left;
@@ -1733,6 +1759,42 @@ const years = [
                 background-repeat: no-repeat;
                 background-size: 100% 100%;
 
+                :deep(.is-active .el-radio-button__inner){
+                  width: 100%;
+                  background: rgb(89, 148, 255) !important;
+                  color: gold;
+                }
+              }
+
+              #item-card-category{
+                .el-radio-group{
+                  display: inline-flex;
+                  font-size: 0;
+                  justify-content: space-around;
+                  flex-wrap: wrap;
+                  align-content: space-between;
+                }
+
+                :deep(.el-radio-button){
+                  width: 100%;
+                  background-color: #10306b4a;
+
+                  .el-radio-button__inner{
+                    background: none;
+                    height: 40px;
+                    width: 100%;
+                    color: aqua;
+                    border: 0;
+                    font-size: 16px;
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  }
+                }
+              }
+
+              #area-card-category{
                 .el-radio-group{
                   display: inline-flex;
                   font-size: 0;
@@ -1743,20 +1805,15 @@ const years = [
 
                 :deep(.el-radio-button){
                   width: 45%;
-                  background-color: #10306b;
+                  background-color: #10306b4a;
 
                   .el-radio-button__inner{
                     background: none;
                     height: 30px;
-                    width: 88%;
+                    width: 100%;
                     color: aqua;
                     border: 0;
                   }
-                }
-                :deep(.is-active .el-radio-button__inner){
-                  width: 100%;
-                  background: rgb(89, 148, 255) !important;
-                  color: gold;
                 }
               }
             }
@@ -1807,14 +1864,13 @@ const years = [
                 }
 
                 .box:nth-child(odd){
-                  background-color: #10306b;
+                  background-color: #10306b4a;
                 }
               }
             }
 
             .left-bottom-right {
               flex: 1;
-              
 
               .box{
                 height: 100%;
@@ -1825,25 +1881,28 @@ const years = [
                 padding: 20px;
 
                 .left-button-right-button {
-                  background-color: white;
                   height: 100%;
                   border-radius: 4px;
+
                   :deep(.el-card){
+                    border: 1px solid #83a9aa;
                     border-radius: 0;
+                    background-color: #10306b4a;
+                    color: white;
                   }
 
                   .card-1{
                     width: 100%;
                     height: 30%;
 
-                    background-color: #6FB1FC;
+                    //background-color: #10306b4a;
                     border-top-left-radius: 4px;
                   }
                   .card-4{
                     width: 100%;
                     height: 30%;
 
-                    background-color: rgba(0,222,255,1);
+                    //background-color: #10306b4a;
                     border-top-right-radius: 4px;
                   }
                   .lbrb_lb{
@@ -1860,26 +1919,26 @@ const years = [
                       width: 100%;
                       height: 100%;
 
-                      background-color: rgba(227,161,96,1);
+                      //background-color: rgba(227,161,96,1);
                       border-bottom-left-radius: 4px;
                     }
                     .card-3{
                       width: 100%;
                       height: 100%;
 
-                      background-color: rgba(0,222,255,1);
+                      //background-color: rgba(0,222,255,1);
                     }
                     .card-5{
                       width: 100%;
                       height: 100%;
 
-                      background-color: #92FFDFFF;
+                      //background-color: #92FFDFFF;
                     }
                     .card-6{
                       width: 100%;
                       height: 100%;
 
-                      background-color: #6FB1FC;
+                      //background-color: #6FB1FC;
                       border-bottom-right-radius: 4px;
                     }
                   }
@@ -1962,4 +2021,5 @@ const years = [
     background: white !important;
   }
 }
+
 </style>

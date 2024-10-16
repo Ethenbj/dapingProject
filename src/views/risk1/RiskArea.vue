@@ -19,6 +19,18 @@ onMounted(()=>{
   // initChart();
   // initChart2();
   initChart3();
+
+  // 替换返回符号
+  document.querySelector('.el-page-header__title').remove()
+  document.querySelector('.el-divider--vertical').remove()
+  let header_page_dom = document.querySelector('.el-page-header__icon');
+  header_page_dom.querySelector('i').remove();
+  let header_page_dom2 = document.createElement('span');
+  header_page_dom2.className = 'new-back-icon';
+  header_page_dom2.setAttribute('style','width: 34px;height: 34px; background-size: 100% 100%;' +
+      'margin-right:20px')
+  header_page_dom2.style.backgroundImage = "url('src/assets/img/返回.png')"
+  header_page_dom.appendChild(header_page_dom2);
 })
 
 // 返回
@@ -373,7 +385,7 @@ function initChart3() {
       itemGap: 20,
       right: "10%",
       textStyle: {
-        color: " #333333",
+        color: "white",
         fontSize: 16,
       },
       // data: ["实际", "计划", "对比"],
@@ -459,9 +471,9 @@ function initChart3() {
       symbol: "none",
       itemStyle: {
         normal: {
-          color: "#ffd4c7", //图例的颜色
+          color: "#dc7585", //图例的颜色
           lineStyle: {
-            color: "#ffd4c7", //线的颜色
+            color: "#dc7585", //线的颜色
           },
         },
       },
@@ -505,9 +517,9 @@ function initChart3() {
         symbol: "none",
         itemStyle: {
           normal: {
-            color: "#89d8fe", //图例的颜色
+            color: "#379cf8", //图例的颜色
             lineStyle: {
-              color: "#89d8fe", //线的颜色
+              color: "#379cf8", //线的颜色
             },
           },
         },
@@ -686,7 +698,7 @@ nextTick(()=>{
       <el-header>
         <el-page-header @back="goBack">
           <template #content>
-            <span class="text-large font-600 mr-3"> {{store.state.title}} </span>
+            <span class="text-large font-600 mr-3">风险监管： {{store.state.title}} </span>
           </template>
         </el-page-header>
       </el-header>
@@ -695,36 +707,65 @@ nextTick(()=>{
           <el-row>
             <el-col :span="24" class="main-left">
               <div class="main-left-top" >
-                <div class="title">
-                  （未知-待处理）
+                <div class="title-box">
+                  <div class="title">
+                   分项目疑点情况
+                  </div>
                 </div>
-<!--                <div id="map"></div>-->
+                <div class="content">
+                  <el-row>
+                    <el-col :span="24" class="main-left-bottom-left">
+                      <div class="box">
+                        <span class="t">扫描数量</span>
+                        <span class="c c1">99</span>
+                      </div>
+                      <div class="box">
+                        <span class="t">扫描余额</span>
+                        <span class="c c2">51</span>
+                      </div>
+                      <div class="box">
+                        <span class="t">已下发</span>
+                        <span class="c c3">26</span>
+                      </div>
+                      <div class="box">
+                        <span class="t">已反馈</span>
+                        <span class="c c4">66</span>
+                      </div>
+                      <div class="box">
+                        <span class="t">已入库</span>
+                        <span class="c c4">45</span>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
               </div>
               <div class="main-left-bottom">
-                <div class="title">
+                <div class="title-box">
+                  <div class="title">
                   项目风险点前十情况
+                  </div>
                 </div>
                 <div class="content">
                   <!-- 待做动态数据 -->
-                  <el-carousel :interval="1000" arrow="hover">
+                  <el-carousel :interval="4000" arrow="hover">
                     <el-carousel-item v-for="item in 10" :key="item">
                       <el-row>
                         <el-col :span="12" class="main-left-bottom-left">
                           <div class="box">
-                            <span class="t">土地</span>
+                            <span class="t">土地出让收入</span>
                             <span class="c c1">29</span>
                           </div>
                           <div class="box">
-                            <span class="t">矿产</span>
+                            <span class="t">矿产资源专项收入</span>
                             <span class="c c2">81</span>
                           </div>
                           <div class="box">
-                            <span class="t">基础</span>
-                            <span class="c c3">39</span>
+                            <span class="t">残疾人就业保障金</span>
+                            <span class="c c3">29</span>
                           </div>
                           <div class="box">
-                            <span class="t">残保金</span>
-                            <span class="c c4">29</span>
+                            <span class="t">基础费种</span>
+                            <span class="c c4">39</span>
                           </div>
                         </el-col>
                         <el-col :span="12" class="main-left-bottom-right">
@@ -741,14 +782,18 @@ nextTick(()=>{
             </el-col>
             <el-col :span="24" class="main-right">
               <div class="main-right-top">
-                <div class="title">
+                <div class="title-box">
+                  <div class="title">
                   涉及本年申报风险
+                  </div>
                 </div>
                 <div id="line"></div>
               </div>
               <div class="main-right-bottom">
-                <div class="title">
+                <div class="title-box">
+                  <div class="title">
                   重点企业
+                  </div>
                 </div>
                 <div id="card">
                   <el-carousel :interval="4000" arrow="hover">
@@ -874,78 +919,149 @@ nextTick(()=>{
 .common-layout {
   width: @base-width;
   height: @base-height;
-  background-color: rgba(8, 16, 35, 1);
+  background-image: url("@/assets/img/纯背景.png");
 
   .el-container {
     height: 100%;
 
     .el-header {
-      background-color: rgba(8, 16, 35, 1);
       height: 60px; // px
       display: flex;
       align-items: center;
       justify-content: left;
       color: #fff;
-      border-bottom: 1px solid #536691; // px
       margin-bottom: 10px; // px
+
+      background-image: url("@/assets/img/返回栏背景.png");
+      background-size: contain;
+
+      :deep(.el-page-header) {
+        .el-page-header__title {
+          margin-left: 10px;
+          font-family: "黑体";
+          font-size: 30px;
+          font-weight: bold;
+          font-synthesis: style;
+          font-style: italic;
+        }
+        .el-divider--vertical{
+          height: 1.5rem;
+        }
+        .el-page-header__content span{
+          color: white;
+          font-size: 24px;
+        }
+      }
     }
 
     .el-aside {
-      border: 1px solid #536691;
       height: 100%;
       width: @base-aside-width;
-      margin-right: 10px; // px
-      padding: 8px;
 
-      .el-card {
-        border: 0;
+      padding: 0 30px 30px 30px;
+
+      .left {
         height: 100%;
-        color: #3386D4; // 搭配背景颜色的文字颜色
-        background: none;
+        display: flex;
+        flex-direction: column;
+        //align-items: flex-start;
 
-        :deep(.el-card__header) {
-          border-bottom: 1px solid #536691;
-        }
+        .title-box {
+          display: flex;
+          height: 60px;
+          width: 100%;
+          justify-content: center;
+          align-items: center;
 
-        .card-header {
-          font-size: 20px;
-          font-weight: bold;
-        }
+          background-image: url("@/assets/img/标题.png");
+          background-size: 100%;
+          margin-bottom: 10px;
 
-        .ec-info {
-          height: 30%;
-          //background-color: #6FB1FC;
-          border: 1px solid #536691;
+          .title {
+            font-weight: bold;
 
-          p {
-            font-size: 14px;
-            text-indent: 2em;
-            text-align: left;
+            font-size: 18px;
+            width: 100%;
+            text-align: center;
           }
         }
 
-        :deep(.el-radio-group) {
-          margin-top: 10px;
+        .content-box{
+          flex: 1;
+          padding: 20px;
+          display: flex;
           flex-direction: column;
-          width: 100%;
+          justify-content: space-between;
 
-          .el-radio-button {
-            width: 100%;
-
-            .el-radio-button__inner {
+          background-image: url("@/assets/img/box框.png");
+          background-size: 100% 100%;
+          .content{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            .ec-info {
+              color: #3386D4; // 搭配背景颜色的文字颜色
               background: none;
-              width: 100%;
-              border-radius: 4px;
-              margin-bottom: 8px;
+              height: 30%;
               border: 1px solid #536691;
+
+              p {
+                font-size: 14px;
+                text-indent: 2em;
+                text-align: left;
+              }
+            }
+
+            :deep(.el-radio-group) {
+              margin-top: 10px;
+              flex-direction: column;
+              width: 100%;
+
+              .el-radio-button {
+                width: 100%;
+
+                .el-radio-button__inner {
+                  background: none;
+                  width: 100%;
+                  border-radius: 4px;
+                  margin-bottom: 8px;
+                  border: 1px solid white;
+                  color: white;
+                }
+              }
+
+              .is-active {
+                .el-radio-button__inner {
+                  color: #3C7EF9; // 高亮————搭配背景颜色的文字颜色
+                  border-color: #409eff;
+                  box-shadow: none;
+                }
+              }
             }
           }
+          .footer{
+            display: flex;
+            flex-direction: column;
+            .f-top{
+              font-size: 24px;
+              font-family: '黑体';
+              z-index: 1;
+            }
 
-          .is-active {
-            .el-radio-button__inner {
-              color: #3C7EF9; // 高亮————搭配背景颜色的文字颜色
-              border-color: #409eff;
-              box-shadow: none;
+            .f-min{
+              color: aqua;
+              font-size: 30px;
+              font-family: '华文楷体';
+              margin-bottom: -80px;
+              z-index: 1;
+            }
+
+            .f-bottom{
+              height: 250px;
+              width: 100%;
+              background-image: url("@/assets/img/左下大图标.png");
+              background-size: 88%;
+              margin-left: 10px;
             }
           }
         }
@@ -954,8 +1070,9 @@ nextTick(()=>{
 
     .el-main {
       height: 100%;
-      border: 1px solid #536691; // px
       width: @base-main-width;
+
+      padding: 0 30px 30px 30px;
 
       .el-row { // 默认padding  20px
         height: 100%;
@@ -964,17 +1081,27 @@ nextTick(()=>{
         justify-items: center;
         justify-content: space-between;
 
-        .title {
-          display: flex;
-          align-items: center;
-          justify-content: start;
-          padding-left: 5px;
+        .title-box{
           height: 60px;
+          margin-bottom: 10px;
+
+          background-image: url("@/assets/img/文本框.png");
+          background-repeat: no-repeat;
+          margin-left: -35px;
+          z-index: 1;
+          .title{
+            height: 100%;
+            font-size: 24px;
+            padding-left: 60px;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+          }
         }
 
         .main-left {
           height: 100%;
-          margin-right: 10px; // px  与右边的div平分宽度
+          margin-right: 30px; // px  与右边的div平分宽度
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -982,25 +1109,14 @@ nextTick(()=>{
           .main-left-top {
             margin-bottom: 10px;
             flex: 1;
-            border: 1px solid #536691;
-            display: flex;
-            flex-direction: column;
-
-            #map {
-              width: 100%;
-              flex: 1;
-              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
-            }
-          }
-
-          .main-left-bottom {
-            flex: 1;
-            border: 1px solid #536691;
             display: flex;
             flex-direction: column;
 
             :deep(.content) {
               flex: 1;
+              background-image: url("@/assets/img/box框.png");
+              background-size: 100% 100%;
+              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
 
               .el-carousel{
                 height: 100%;
@@ -1020,7 +1136,7 @@ nextTick(()=>{
                     flex:1;
                     display: flex;
                     justify-content: space-between;
-                    background-color: #747bff;
+                    //background-color: #747bff;
                     .t{
                       display: flex;
                       align-items: center;
@@ -1035,6 +1151,65 @@ nextTick(()=>{
                       padding-right: 16px;
                       text-align: left;
                     }
+                  }
+                  .box:nth-child(odd) {
+                    background-color: #10306b4a;
+                  }
+                  .box:not(:last-child){
+                    margin-bottom: 20px;
+                  }
+                }
+              }
+            }
+          }
+
+          .main-left-bottom {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            :deep(.content) {
+              flex: 1;
+              background-image: url("@/assets/img/box框.png");
+              background-size: 100% 100%;
+              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
+
+              .el-carousel{
+                height: 100%;
+                .el-carousel__container{
+                  height: 100%;
+                }
+              }
+
+              .el-row{
+                height: 100%;
+                .main-left-bottom-left{
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-between;
+                  padding: 20px;
+                  .box{
+                    flex:1;
+                    display: flex;
+                    justify-content: space-between;
+                    //background-color: #747bff;
+                    .t{
+                      display: flex;
+                      align-items: center;
+                      align-self: center;
+                      padding-left: 16px;
+                      text-align: left;
+                    }
+                    .c1, .c2, .c3, .c4, .c5{
+                      display: flex;
+                      align-items: center;
+                      align-self: center;
+                      padding-right: 16px;
+                      text-align: left;
+                    }
+                  }
+                  .box:nth-child(odd) {
+                    background-color: #10306b4a;
                   }
                   .box:not(:last-child){
                     margin-bottom: 20px;
@@ -1052,7 +1227,8 @@ nextTick(()=>{
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    background-color: #747bff;
+                    background-color: #10306b4a;
+                    color: white;
 
                     .t{
                       width: 100%;
@@ -1062,7 +1238,7 @@ nextTick(()=>{
                       align-items: center;
                       align-self: center;
                       justify-content: center;
-                      border-bottom: 5px solid rgba(8, 16, 35, 1);
+                      border-bottom: 5px solid rgba(136, 136, 136, 0.58);
                     }
 
                     .c{
@@ -1070,6 +1246,8 @@ nextTick(()=>{
                       white-space: nowrap;
                     }
                   }
+
+
                 }
               }
             }
@@ -1085,23 +1263,27 @@ nextTick(()=>{
           .main-right-top {
             margin-bottom: 10px;
             flex: 1;
-            border: 1px solid #536691;
             display: flex;
             flex-direction: column;
 
             #line {
               flex: 1;
+              background-image: url("@/assets/img/box框.png");
+              background-size: 100% 100%;
+              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
             }
           }
 
           .main-right-bottom {
             flex: 1;
-            border: 1px solid #536691;
             display: flex;
             flex-direction: column;
 
             #card {
               flex: 1;
+              background-image: url("@/assets/img/box框.png");
+              background-size: 100% 100%;
+              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
 
               .el-carousel__item:nth-child(2n) {
                 background-color: #99a9bf;
@@ -1137,17 +1319,56 @@ nextTick(()=>{
                   box-shadow: none;
                   border-radius: 0;
                 }
+
+                .el-card{
+                  border: 1px solid #83a9aa;
+                  border-radius: 0;
+                  background-color: #10306b4a;
+                  color: white;
+                }
+
                 .card-left-top .el-row .el-col:first-child .el-card{
                   border-top-left-radius: 4px;
+                }
+
+                .card-left-top{
+                  .card-1{
+                    //background-color: rgba(227,161,96,1);
+                  }
+                  .card-2{
+                    //background-color: rgba(0,222,255,1);
+                  }
                 }
 
                 .card-left-bottom .el-row .el-col:first-child .el-card{
                   border-bottom-left-radius: 4px;
                 }
 
+                .card-left-bottom{
+                  .card-3{
+                    //background-color: #6FB1FC;
+                  }
+                }
+
+                .card-left{
+                  .card-4{
+                    //background-color: #6FB1FC;
+                  }
+
+                  .card-5{
+                    //background-color: #92FFDFFF;
+                  }
+                }
+
                 .card-right .el-card{
                   border-top-right-radius: 4px;
                   border-bottom-right-radius: 4px;
+                }
+
+                .card-right{
+                  .card-6{
+                    //background-color: rgba(0,222,255,1);
+                  }
                 }
               }
             }

@@ -172,7 +172,7 @@
       "name": "水利建设基金"
     }, {
       "value": -100,
-      "name": "人防费"
+      "name": "人防工程异地建设费"
     }, {
       "value": 10,
       "name": "其他省级非税收入",
@@ -290,7 +290,7 @@
 
 
     var xdata = ["教育费附加","地方教育附加","残疾人保障金","文化事业建设费","水利建设基金","工会经费","电力能源类","水土保持补偿费","排污权出让收入",
-      "人防费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
+      "人防工程异地建设费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
     var ydata  = [10,20,15,10,9,16,13,21,14,17,5,9,11,14,17,5,9,11,11];
     let option = {
       backgroundColor: 'rgba(8, 16, 35, 1)',
@@ -1708,17 +1708,18 @@ const years = [
                 .lbrb_right{
 
                 }
+
                 .card-1{
                   width: 100%;
                   height: 30%;
 
-                  background-color: #6FB1FC;
+                  //background-color: #6FB1FC;
                 }
                 .card-4{
                   width: 100%;
                   height: 30%;
 
-                  background-color: rgba(0,222,255,1);
+                  //background-color: rgba(0,222,255,1);
                 }
                 .lbrb_lb{
                   height: 70%;
@@ -1734,25 +1735,25 @@ const years = [
                     width: 100%;
                     height: 100%;
 
-                    background-color: rgba(227,161,96,1);
+                    //background-color: rgba(227,161,96,1);
                   }
                   .card-3{
                     width: 100%;
                     height: 100%;
 
-                    background-color: rgba(0,222,255,1);
+                    //background-color: rgba(0,222,255,1);
                   }
                   .card-5{
                     width: 100%;
                     height: 100%;
 
-                    background-color: #92FFDFFF;
+                    //background-color: #92FFDFFF;
                   }
                   .card-6{
                     width: 100%;
                     height: 100%;
 
-                    background-color: #6FB1FC;
+                    //background-color: #6FB1FC;
                   }
                 }
               }
