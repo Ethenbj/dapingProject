@@ -1,0 +1,2 @@
+//npm run dev:staging //会运行VITE_DEV_SERVER 数据
+//npm run build:staging //会运行VITE_SERVER数据进行打包
