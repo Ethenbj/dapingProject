@@ -67,7 +67,7 @@ function initChart() {
     {"name": "电力能源类", "value": 4536},
     {"name": "水土保持补偿费", "value": 750},
     {"name": "排污权出让收入", "value": 2373},
-    {"name": "人防工程异地建设费", "value": 493},
+    {"name": "防空地下室易地建设费", "value": 493},
     {"name": "城镇垃圾处理费", "value": 385},
     {"name": "土地闲置费", "value": 5449},
     {"name": "土地出让金", "value": 869},
@@ -81,7 +81,7 @@ function initChart() {
 
   // let result: Array<object> = echartData.sort((n1, n2) =>{
   //   return n1.value - n2.value;
-  // })
+  // }
 
   let formatNumber = function (num) {
     let reg = /(?=(\B)(\d{3})+$)/g;
@@ -342,7 +342,7 @@ function initChart2(){
 
 
   var xdata = ["教育费附加","地方教育附加","残疾人保障金","文化事业建设费","水利建设基金","工会经费","电力能源类","水土保持补偿费","排污权出让收入",
-    "人防工程异地建设费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
+    "防空地下室易地建设费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
   var ydata  = [10,20,15,10,9,16,13,21,14,17,5,9,11,14,17,5,9,11,11];
   let option = {
     // backgroundColor: 'rgba(8, 16, 35, 1)',
@@ -744,14 +744,14 @@ let enterpriseData = [
 let enterpriseCount = enterpriseData.length;
 nextTick(()=>{
   if (enterpriseCount > 0) {
-    for(let i in enterpriseData) {
-      let index = parseInt(i)+1;
-      let dom = document.querySelector('.card-all-'+index)
-
-      for(let j in enterpriseData[i]){
-        dom.querySelector('.card-1 .card-div-item-title').textContent = j;
-      }
-    }
+    // for(let i in enterpriseData) {
+    //   let index = parseInt(i)+1;
+    //   let dom = document.querySelector('.card-all-'+index)
+    //
+    //   for(let j in enterpriseData[i]){
+    //     dom.querySelector('.card-1 .card-div-item-title').textContent = j;
+    //   }
+    // }
   }
 })
 
@@ -831,49 +831,57 @@ nextTick(()=>{
                   </div>
                 </div>
                 <div id="card">
-                  <el-carousel :interval="4000" arrow="hover">
+                  <el-carousel :interval="100000" arrow="hover">
                     <el-carousel-item v-for="item in enterpriseCount" :key="item">
                       <el-card :class="`card-all card-all-${item}`">
                         <div class="card-div-box">
                           <el-row>
-                            <el-col :span="12">
+                            <el-col :span="10">
                               <el-row class="card-left">
                                 <el-col>
                                   <div class="card-left-top">
                                     <el-row>
-                                      <el-col :span="12">
-                                        <el-card class="card-div-item card-1">
-                                          <div class="card-div-item-title">
-                                            重点企业1
-                                          </div>
-                                          <div class="card-div-item-content">
-                                            内容
-                                          </div>
-                                        </el-card>
-                                      </el-col>
-                                      <el-col :span="12">
-                                        <el-card class="card-div-item card-2">
-                                          <div class="card-div-item-title">
-                                            标题
-                                          </div>
-                                          <div class="card-div-item-content">
-                                            内容
-                                          </div>
-                                        </el-card>
-                                      </el-col>
-                                    </el-row>
-                                  </div>
-                                </el-col>
-                                <el-col>
-                                  <div class="card-left-bottom">
-                                    <el-row>
                                       <el-col :span="24">
-                                        <el-card class="card-div-item card-3">
-                                          <div class="card-div-item-title">
-                                            标题
+                                        <el-card class="card-div-item card-1">
+                                          <div class="qymc">
+                                            <div class="card-div-item-title">
+                                              企业名称
+                                            </div>
+                                            <div class="card-div-item-content">
+                                              企业内容企业内容企业内容企业内容企业内容
+                                            </div>
                                           </div>
-                                          <div class="card-div-item-content">
-                                            内容
+                                          <div class="sbh">
+                                            <div class="card-div-item-title">
+                                              识别号
+                                            </div>
+                                            <div class="card-div-item-content sbh-c">
+                                              1234567893216487
+                                            </div>
+                                          </div>
+                                          <div class="zgswfj">
+                                            <div class="card-div-item-title">
+                                              主管税务分局
+                                            </div>
+                                            <div class="card-div-item-content">
+                                              主管税务分局内容主管税务分局内容
+                                            </div>
+                                          </div>
+                                          <div>
+                                            <div class="card-div-item-title">
+                                              本年纳税金额
+                                            </div>
+                                            <div class="card-div-item-content money">
+                                              56 <span>万元</span>
+                                            </div>
+                                          </div>
+                                          <div>
+                                            <div class="card-div-item-title">
+                                              上年纳税金额
+                                            </div>
+                                            <div class="card-div-item-content money">
+                                              12 <span>万元</span>
+                                            </div>
                                           </div>
                                         </el-card>
                                       </el-col>
@@ -882,44 +890,115 @@ nextTick(()=>{
                                 </el-col>
                               </el-row>
                             </el-col>
-                            <el-col :span="6">
-                              <el-row class="card-left">
+                            <el-col :span="14">
+                              <el-row class="right">
                                 <el-col :span="24">
-                                  <el-card class="card-div-item card-4">
-                                    <div class="card-div-item-title">
-                                      标题
-                                    </div>
-                                    <div class="card-div-item-content">
-                                      内容
-                                    </div>
-                                  </el-card>
-                                </el-col>
-                                <el-col :span="24">
-                                  <el-card class="card-div-item card-5">
-                                    <div class="card-div-item-title">
-                                      标题
-                                    </div>
-                                    <div class="card-div-item-content">
-                                      内容
+                                  <el-card class="card-div-item card-2">
+                                    <div class="right-main">
+                                      <div class="right-main-top">
+                                        <div class="zzsxssr">
+                                          <div class="card-div-item-title">
+                                            本年增值税销售收入
+                                          </div>
+                                          <div class="card-div-item-content money">
+                                            123321 <span>万元</span>
+                                          </div>
+                                          &nbsp;&nbsp;
+                                          排名：<div :class="`mc mc-${item}`"> <img :src="`src/assets/img/排名${item}.png`" v-if="item<4" alt=""/> <b v-if="item>3 & item<10">0{{item}}</b> <b v-if="item>9">{{item}}</b> </div>
+                                        </div>
+                                      </div>
+                                      <div class="right-main-bottom">
+                                        <div class="right-main-bottom-left">
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              本年开票金额
+                                            </div>
+                                            <div class="card-div-item-content money">
+                                              123321 <span>万元</span>
+                                            </div>
+                                          </div>
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              税务登记时间
+                                            </div>
+                                            <div class="card-div-item-content time">
+                                              2022-03-01 15:16:17
+                                            </div>
+                                          </div>
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              疑点数量
+                                            </div>
+                                            <div class="card-div-item-content yidian">
+                                              124
+                                            </div>
+                                          </div>
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              本年应对疑点
+                                            </div>
+                                            <div class="card-div-item-content yidian">
+                                              15
+                                            </div>
+                                          </div>
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              历史应对疑点
+                                            </div>
+                                            <div class="card-div-item-content yidian">
+                                              36
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="right-main-bottom-right">
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              本年受票金额
+                                            </div>
+                                            <div class="card-div-item-content money">
+                                              123321 <span>万元</span>
+                                            </div>
+                                          </div>
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              行业
+                                            </div>
+                                            <div class="card-div-item-content">
+                                              行业内容
+                                            </div>
+                                          </div>
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              疑点得分
+                                            </div>
+                                            <div class="card-div-item-content score">
+                                              123321
+                                            </div>
+                                          </div>
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              本年应对入库金额
+                                            </div>
+                                            <div class="card-div-item-content money">
+                                              123321 <span>万元</span>
+                                            </div>
+                                          </div>
+                                          <div class="zzsxssr">
+                                            <div class="card-div-item-title">
+                                              历史应对入库金额
+                                            </div>
+                                            <div class="card-div-item-content money">
+                                              123321 <span>万元</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
                                   </el-card>
                                 </el-col>
                               </el-row>
                             </el-col>
-                            <el-col :span="6">
-                              <el-row class="card-right">
-                                <el-col :span="24">
-                                  <el-card class="card-div-item card-6">
-                                    <div class="card-div-item-title">
-                                      标题
-                                    </div>
-                                    <div class="card-div-item-content">
-                                      内容
-                                    </div>
-                                  </el-card>
-                                </el-col>
-                              </el-row>
-                            </el-col>
+
                           </el-row>
                         </div>
                       </el-card>
@@ -958,6 +1037,7 @@ nextTick(()=>{
   background-size: cover;
 
   .el-container {
+    color: white;
     height: 100%;
 
     .el-header {
@@ -1197,9 +1277,9 @@ nextTick(()=>{
 
             #card {
               flex: 1;
+              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
               background-image: url("@/assets/img/box框.png");
               background-size: 100% 100%;
-              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
 
               .el-carousel__item:nth-child(2n) {
                 background-color: #99a9bf;
@@ -1236,23 +1316,70 @@ nextTick(()=>{
                   border-radius: 0;
                 }
 
+                .card-div-box{
+                  background-image: url("@/assets/img/企业框2.png");
+                  background-repeat: no-repeat;
+                  background-size: 100% 100%;
+                }
+
                 .el-card{
-                  border: 1px solid #83a9aa;
+                  //border: 1px solid #10306b4a;
+                  border: 0;
                   border-radius: 0;
-                  background-color: #10306b4a;
+                  //background-color: #10306b4a;
+                  background-color: transparent;
                   color: white;
+                  box-shadow: none;
                 }
 
                 .card-left-top .el-row .el-col:first-child .el-card{
                   border-top-left-radius: 4px;
                 }
 
+                .card-div-item-title{
+                  text-align: left;
+                  font-size: 1.1rem;
+                  font-weight: bold;
+                  padding: 2px 3px 2px 5px;
+                  background-color: #10306b4a;
+                  //background-color: #133979;
+                  margin-top: 5px;
+                }
+
+                .card-div-item-content{
+                  padding-left: 5px;
+                  font-size: 0.95rem;
+                  .number{
+                    display: flex;
+                  }
+                }
+
+                .money{
+                  color: gold;
+                }
+
+                .score{
+                  color: #00ff00;
+                }
+
+                .yidian{
+                  color: #ff0000;
+                }
+
+                .time{
+                  color: #00d9ff;
+                }
+
+                .sbh-c{
+                  color: #008cff;
+                }
+
                 .card-left-top{
                   .card-1{
-                    //background-color: rgba(227,161,96,1);
-                  }
-                  .card-2{
-                    //background-color: rgba(0,222,255,1);
+                    .card-div-item-content{
+                      text-align: left;
+                      white-space: normal;
+                    }
                   }
                 }
 
@@ -1260,31 +1387,53 @@ nextTick(()=>{
                   border-bottom-left-radius: 4px;
                 }
 
-                .card-left-bottom{
-                  .card-3{
+                .right{
+                  .card-2{
                     //background-color: #6FB1FC;
-                  }
-                }
+                    .right-main{
+                      .right-main-top{
+                        margin-bottom: 5px;
 
-                .card-left{
-                  .card-4{
-                    //background-color: #6FB1FC;
-                  }
+                        img{
+                          position: absolute;
+                          margin-top: -58px;
+                          height: 60px;
+                        }
 
-                  .card-5{
-                    //background-color: #92FFDFFF;
+                        .zzsxssr,.zgswfj{
+                          display: flex;
+                          justify-content: start;
+                          align-items: flex-end;
+                          .card-div-item-title{
+
+                          }
+                          .card-div-item-content{
+                            margin-left: 10px;
+                          }
+                        }
+                      }
+
+                      .right-main-bottom{
+                        display: flex;
+                        .card-div-item-content{
+                          text-align: left;
+                        }
+                        .right-main-bottom-left{
+                          flex: 1;
+                          margin-right: 20px;
+                        }
+
+                        .right-main-bottom-right{
+                          flex: 1;
+                        }
+                      }
+                    }
                   }
                 }
 
                 .card-right .el-card{
                   border-top-right-radius: 4px;
                   border-bottom-right-radius: 4px;
-                }
-
-                .card-right {
-                  .card-6 {
-                    //background-color: rgba(0, 222, 255, 1);
-                  }
                 }
               }
             }

@@ -6,15 +6,20 @@ import { createStore } from 'vuex'
 // Mutations（变更）：用于修改状态的唯一途径。Mutations是同步的操作，用于处理同步的状态变更。每个Mutation都有一个字符串类型的事件名称和一个回调函数，通过提交（commit）Mutation来触发状态的变更。
 // Actions（动作：提交mutation，可以包含异步操作）：用于处理异步操作和复杂的业务逻辑。Actions可以包含任意异步操作，例如发送网络请求或执行定时任务，并通过提交Mutations来修改状态。Actions可以通过分发（dispatch）来触发。
 // Modules（模块）：用于将大型的Vuex应用程序拆分为更小的模块，每个模块都有自己的状态、获取器、变更和动作。这样可以更好地组织代码，提高代码的可维护性和可扩展性。
+
 const store = createStore({
     // @ts-ignore
     state: sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getItem('state')) : {
+        // 存储token
+        token:"",
         count: 0,
         id: 0,
         title: '',
         // 首页左上中心 charts 图状态
         home_left_top_state: '',
         home_left_button_state: '',
+        // startTime 登录时间
+        startTime: "",
     },
     mutations: {
         // @ts-ignore Home
@@ -42,7 +47,21 @@ const store = createStore({
         set_title(state, payload) {
             state.title = payload.title
             sessionStorage.setItem('state', JSON.stringify(state))
-        }
+        },
+
+        // token
+        // 修改token，并将token存入localStorage
+        // @ts-ignore
+        setToken(state,token) {
+            state.token = token;
+            sessionStorage.setItem('state', JSON.stringify(state))
+        },
+        // @ts-ignore
+        delToken(state) {
+            state.token = "";
+            sessionStorage.setItem('state', JSON.stringify(state))
+        },
+
 
     },
     actions: {

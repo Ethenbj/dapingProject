@@ -15,6 +15,9 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 // vuex store
 import store from './store'
+// vue axios
+// @ts-ignore
+import axios from './request/axios.ts'
 
 import './style.css'
 // @ts-ignore
@@ -42,4 +45,5 @@ app.use(ElementPlus)
 app.use(vuetify)
 app.use(router)
 app.use(store)
+app.use(axios)
 app.mount('#app')

@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "dev:staging": "vite dev --mode staging",
+    "build:staging": "vite build --mode staging",
+    "build-only-staging": "vite build --mode staging",
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
@@ -12,10 +15,12 @@
     "@dataview/datav-vue3": "^0.0.0-test.1672506674342",
     "@element-plus/icons-vue": "^2.3.1",
     "@types/jquery": "^3.5.31",
+    "axios": "^1.7.7",
     "echarts": "^5.5.1",
     "element-plus": "^2.8.4",
     "jquery": "^3.7.1",
     "pnpm": "^9.11.0",
+    "qs": "^6.13.0",
     "vue": "^3.4.37",
     "vue-router": "^4.4.5",
     "vuetify": "^3.7.2",
