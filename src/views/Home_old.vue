@@ -1296,7 +1296,7 @@ const years = [
                         <el-col :span="14" class="lblb-r" :class="categoryTab">
                           <el-text class="title" type="warning">扫描数量</el-text>
                           <el-text class="content c1" type="danger">11</el-text>
-                          <el-text class="title" type="warning">扫描金额</el-text>
+                          <el-text class="title" type="warning">涉及企业</el-text>
                           <el-text class="content c2" type="danger">11</el-text>
                           <el-text class="title" type="warning">已下发</el-text>
                           <el-text class="content c3" type="danger">11</el-text>

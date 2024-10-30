@@ -291,7 +291,7 @@ function initChart2(){
     yAxis: {
       type: 'category',
       // 数据反向
-      data: ['已入库', '已反馈', '已下发', '扫描金额', '扫描数量'],
+      data: ['已入库', '已反馈', '已下发', '涉及企业', '扫描数量'],
       splitLine: {
         show:false,
         lineStyle: {
@@ -720,7 +720,7 @@ nextTick(()=>{
                         <span class="c c1">99</span>
                       </div>
                       <div class="box">
-                        <span class="t">扫描余额</span>
+                        <span class="t">涉及企业</span>
                         <span class="c c2">51</span>
                       </div>
                       <div class="box">

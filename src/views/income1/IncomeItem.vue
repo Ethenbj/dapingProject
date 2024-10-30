@@ -47,7 +47,30 @@
   const radio1 = ref<TabsInstance['radio1']>('2024');
 
   // 左侧按钮点击事件
-  function handlerYearDataBtn(value){
+  // 历年数据选择下拉框
+  const year_select = ref('');
+  const year_select_options = [
+    { value: '2023', label: '2023年数据' },
+    { value: '2022', label: '2022年数据' },
+    { value: '2021', label: '2021年数据' },
+    { value: '2020', label: '2020年数据' },
+    { value: '2019', label: '2019年数据' },
+    { value: '2018', label: '2018年数据' },
+  ]
+  function handlerYearDataRadio(value){
+    radio1.value = value
+    year_select.value = ""
+    document.querySelector('.select-year .el-select__wrapper').style.border = '1px solid #fff'
+    document.querySelector('.select-year .el-select__placeholder').style.color = '#a8abb2'
+
+    ElMessage(`选择 ${value} 年度数据`)
+  }
+
+  function handlerYearDataSelect(value){
+    radio1.value = ''
+    document.querySelector('.select-year .el-select__wrapper').style.border = '1px solid #409eff'
+    document.querySelector('.select-year .el-select__placeholder').style.color = '#3C7EF9'
+
     ElMessage(`选择 ${value} 年度数据`)
   }
 
@@ -1012,16 +1035,6 @@
     }
   })
 
-  // 历年数据选择下拉框
-  const year_select = ["2023","2022","2021","2020","2019","2018"];
-
-  const year_select_options = [];
-  year_select.forEach((item, index) => {
-    year_select_options.push({
-      label: item,
-      value: item+'年数据'
-    });
-  })
 </script>
 
 
@@ -1048,17 +1061,18 @@
                     简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介
                   </p>
                 </el-card>
-                <el-radio-group v-model="radio1" size="large" @change="handlerYearDataBtn">
+                <el-radio-group v-model="radio1" size="large" class="radio-year" @change="handlerYearDataRadio">
                   <el-radio-button label="2024年数据" value="2024" />
-                  <el-select-v2
-                      v-model="year_select"
-                      filterable
-                      :options="year_select_options"
-                      placeholder="请选择历年数据"
-                      style="width: 240px; margin-right: 16px; vertical-align: middle"
-                      multiple
-                  />
                 </el-radio-group>
+                <el-select v-model="year_select" placeholder="请选择历年数据" class="select-year" @change="handlerYearDataSelect">
+                  <el-option
+                      v-for="item in year_select_options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                  />
+                  <!--                        :disabled="item.disabled"-->
+                </el-select>
               </div>
               <div class="footer">
                 <div class="f-top">2018 - 2024</div>
@@ -1401,7 +1415,7 @@
             .ec-info {
               color: #3386D4; // 搭配背景颜色的文字颜色
               background: none;
-              height: 30%;
+              height: 300px;
               border: 1px solid #536691;
 
               p {
@@ -1435,6 +1449,31 @@
                   border-color: #409eff;
                   box-shadow: none;
                 }
+              }
+            }
+
+            :deep(.el-select) {
+              width: 100% !important;
+
+
+              .el-select__wrapper {
+                width: 100%;
+                background: none;
+                box-shadow: none;
+                //border: 1px solid #409eff;
+                border: 1px solid white;
+
+
+                .el-select__selected-item  {
+                  background: none;
+                  width: 100%;
+                }
+              }
+
+              //下拉框
+              .el-input__inner{
+                border: none;
+                color: white;
               }
             }
           }

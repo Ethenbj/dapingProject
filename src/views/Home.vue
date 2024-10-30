@@ -1648,9 +1648,11 @@ watch(riskTab, (newValue, oldValue) => {
   if (risk_change_id !== ''){
     document.querySelector('#'+risk_change_id+' #'+risk_change_id+'-div').style.display = 'none';
     document.querySelector('#lblb-l #'+risk_change_id+'-category').setAttribute('style','display: none !important')
+    document.querySelector('#lblb-m #'+risk_change_id+'-min').setAttribute('style','display: none !important')
   }else{
     document.querySelector('#item-card #item-card-div').style.display = 'none';
     document.querySelector('#lblb-l #item-card-category').setAttribute('style','display: none !important')
+    document.querySelector('#lblb-m #item-card-min').setAttribute('style','display: none !important')
   }
   risk_change_id = newValue;
   if (newValue === 'item-card'){
@@ -1662,6 +1664,7 @@ watch(riskTab, (newValue, oldValue) => {
   nextTick(() => {  // dom更新之后再进行回调
     document.querySelector('#'+risk_change_id+' #'+risk_change_id+'-div').style.display = '';
     document.querySelector('#lblb-l #'+risk_change_id+'-category').setAttribute('style',"display: ''")
+    document.querySelector('#lblb-m #'+risk_change_id+'-min').setAttribute('style',"display: ''")
 
     clearInterval(category_tab_time)
     category_time_params = [];
@@ -1769,12 +1772,43 @@ function categoryTab_event() {
 
     el.addEventListener('click', function (e) {
       let title = el.querySelector('.el-radio-button__inner').textContent;
+      let type = el.querySelector('input').value;
       store.commit('set_title', {title: title});
 
       if (risk_change_id == 'area-card') {
         router.push('/riskArea')
       } else {
-        router.push('/riskItem')
+        let risk_item = [];
+        switch (type){
+          case 'one':
+            tudi_zhibiao_data.forEach((item,index) => {
+              risk_item.push(item['zhibiao_name'])
+            })
+            store.commit('set_risk_item', {risk_item: risk_item});
+            router.push('/riskItem')
+            break;
+          case 'two':
+            kuangchan_zhibiao_data.forEach((item,index) => {
+              risk_item.push(item['zhibiao_name'])
+            })
+            store.commit('set_risk_item', {risk_item: risk_item});
+            router.push('/riskItem')
+            break;
+          case 'three':
+            chanjiren_zhibiao_data.forEach((item,index) => {
+              risk_item.push(item['zhibiao_name'])
+            })
+            store.commit('set_risk_item', {risk_item: risk_item});
+            router.push('/riskItem')
+            break;
+          case 'four':
+            jichu_zhibiao_data.forEach((item,index) => {
+              risk_item.push(item['zhibiao_name'])
+            })
+            store.commit('set_risk_item', {risk_item: risk_item});
+            router.push('/riskItem')
+            break;
+        }
       }
     })
   })
@@ -1983,6 +2017,7 @@ nextTick(()=>{
                 <el-radio-group v-model="riskTab">
                   <el-radio-button value="item-card">项目</el-radio-button>
                   <el-radio-button value="area-card">市州</el-radio-button>
+                  <el-radio-button value="pici-card">批次</el-radio-button>
                 </el-radio-group>
               </div>
             </div>
@@ -2016,28 +2051,85 @@ nextTick(()=>{
                     <el-radio-button value="fifteen">湘江新区</el-radio-button>
                   </el-radio-group>
                 </div>
+
+                <div id="pici-card-category" class="category" style="display: none">
+                  <div class="card-title-box">
+                    <div class="card-title-text" style="font-size: 1.3rem;color: #0091ea;padding:0 10px 10px 10px">下发途径</div>
+                  </div>
+                  <el-radio-group v-model="categoryTab">
+                    <el-radio-button value="one">一体式监管平台</el-radio-button>
+                    <el-radio-button value="two">一体化风险管理系统</el-radio-button>
+                    <el-radio-button value="three">决策二包风险管理系统</el-radio-button>
+                    <el-radio-button value="four">数据质量监控平台</el-radio-button>
+                  </el-radio-group>
+                </div>
               </div>
-              <div class="left-bottom-min">
-                <div class="lblb-r" :class="categoryTab">
-                  <div class="box">
-                    <el-text class="title">扫描数量</el-text>
-                    <el-text class="content c1">11</el-text>
+              <div class="left-bottom-min" id="lblb-m">
+                <div id="item-card-min" class="min">
+                  <div class="lblb-r" :class="categoryTab">
+                    <div class="box">
+                      <el-text class="title">扫描数量</el-text>
+                      <el-text class="content c1">11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title">涉及企业</el-text>
+                      <el-text class="content c2">11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >已下发</el-text>
+                      <el-text class="content c3">11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >已反馈</el-text>
+                      <el-text class="content c4" >11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >已入库</el-text>
+                      <el-text class="content c5" >11</el-text>
+                    </div>
                   </div>
-                  <div class="box">
-                    <el-text class="title">扫描金额</el-text>
-                    <el-text class="content c2">11</el-text>
+                </div>
+                <div id="area-card-min" class="min" style="display: none">
+                  <div class="lblb-r" :class="categoryTab">
+                    <div class="box">
+                      <el-text class="title">扫描数量</el-text>
+                      <el-text class="content c1">11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title">涉及企业</el-text>
+                      <el-text class="content c2">11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >已下发</el-text>
+                      <el-text class="content c3">11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >已反馈</el-text>
+                      <el-text class="content c4" >11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >已入库</el-text>
+                      <el-text class="content c5" >11</el-text>
+                    </div>
                   </div>
-                  <div class="box">
-                    <el-text class="title" >已下发</el-text>
-                    <el-text class="content c3">11</el-text>
-                  </div>
-                  <div class="box">
-                    <el-text class="title" >已反馈</el-text>
-                    <el-text class="content c4" >11</el-text>
-                  </div>
-                  <div class="box">
-                    <el-text class="title" >已入库</el-text>
-                    <el-text class="content c5" >11</el-text>
+                </div>
+                <div id="pici-card-min" class="min" style="display: none">
+                  <div class="lblb-r" :class="categoryTab">
+                    <div class="card-title-box">
+                      <div class="card-title-text" style="font-size: 1.3rem;color: #0091ea;padding:0 10px 10px 10px">批次</div>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >总户数</el-text>
+                      <el-text class="content c3">11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >涉及金额</el-text>
+                      <el-text class="content c4" >11</el-text>
+                    </div>
+                    <div class="box">
+                      <el-text class="title" >风险等级</el-text>
+                      <el-text class="content c5" >11</el-text>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2331,6 +2423,11 @@ nextTick(()=>{
                           </el-card>
                         </el-carousel-item>
                       </el-carousel>
+                    </el-row>
+                  </div>
+                  <div style="height: 100%;display: none" id="pici-card-div">
+                    <el-row class="left-button-right-button" :class="categoryTab">
+
                     </el-row>
                   </div>
                 </div>
@@ -2704,55 +2801,93 @@ nextTick(()=>{
                   }
                 }
               }
+
+
+              #pici-card-category{
+                display: flex;
+                flex-direction: column;
+
+                .el-radio-group{
+                  flex: 1;
+                  display: inline-flex;
+                  font-size: 0;
+                  justify-content: space-around;
+                  flex-wrap: wrap;
+                  align-content: space-between;
+                }
+
+                :deep(.el-radio-button){
+                  width: 100%;
+                  background-color: #10306b4a;
+
+                  .el-radio-button__inner{
+                    background: none;
+                    height: 40px;
+                    width: 100%;
+                    color: aqua;
+                    border: 0;
+                    font-size: 16px;
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  }
+                }
+              }
+
             }
 
             .left-bottom-min {
               width: 25%;
               margin-right: 20px;
-              
 
-              .lblb-r{
+              .min{
                 height: 100%;
                 width: 100%;
-                background-image: url("@/assets/img/box框.png");
-                background-repeat: no-repeat;
-                background-size: 100% 100%;
-                padding: 20px;
 
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: space-between;
-                :deep(.el-text){
-                  color: white !important;
-                }
-                .box{
-                  width: 100%;
+                .lblb-r{
                   height: 100%;
+                  width: 100%;
+                  background-image: url("@/assets/img/box框.png");
+                  background-repeat: no-repeat;
+                  background-size: 100% 100%;
+                  padding: 20px;
+
                   display: flex;
-                  flex-direction: row;
-                  justify-content: space-between;
+                  flex-direction: column;
                   align-items: center;
-
-                  .title{
-                    font-size: 18px;
-                    display: block;
-                    padding: 5px 0 5px 15px;
+                  justify-content: space-between;
+                  :deep(.el-text){
+                    color: white !important;
                   }
-                  .content{
-                    font-size: 18px;
-                    display: block;
-                    padding: 5px 15px 5px 0;
+                  .box{
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .title{
+                      font-size: 18px;
+                      display: block;
+                      padding: 5px 0 5px 15px;
+                    }
+                    .content{
+                      font-size: 18px;
+                      display: block;
+                      padding: 5px 15px 5px 0;
+                    }
+
                   }
 
-                }
+                  .box:not(:last-child){
+                    margin-bottom: 10px;
+                  }
 
-                .box:not(:last-child){
-                  margin-bottom: 10px;
-                }
-
-                .box:nth-child(odd){
-                  background-color: #10306b4a;
+                  .box:nth-child(odd){
+                    background-color: #10306b4a;
+                  }
                 }
               }
             }

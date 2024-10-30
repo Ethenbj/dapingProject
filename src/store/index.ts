@@ -20,6 +20,8 @@ const store = createStore({
         home_left_button_state: '',
         // startTime 登录时间
         startTime: "",
+        // 监控指标
+        risk_item: []
     },
     mutations: {
         // @ts-ignore Home
@@ -48,6 +50,14 @@ const store = createStore({
             state.title = payload.title
             sessionStorage.setItem('state', JSON.stringify(state))
         },
+
+        // @ts-ignore
+        set_risk_item(state, payload) {
+            state.risk_item = payload
+            sessionStorage.setItem('state', JSON.stringify(state))
+        },
+
+        // @ts-ignore
 
         // token
         // 修改token，并将token存入localStorage

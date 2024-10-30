@@ -38,11 +38,37 @@ function goBack(){
   router.back()
 }
 
-const radio1 = ref<TabsInstance['radio1']>('1');
+const radio1 = ref<TabsInstance['radio1']>('all');
 
 // 左侧按钮点击事件
-function handlerYearDataBtn(value){
-  ElMessage(`选择 ${value} 指标`)
+// 历年数据选择下拉框
+const year_select = ref('');
+// 获取跳转来的数据
+const risk_item = store.state.risk_item.risk_item
+
+const year_select_options = []
+risk_item.forEach((item,index) =>{
+  year_select_options.push({
+    value: index+1,
+    label: item
+  })
+})
+
+function handlerYearDataRadio(value){
+  radio1.value = value
+  year_select.value = ""
+  document.querySelector('.select-year .el-select__wrapper').style.border = '1px solid #fff'
+  document.querySelector('.select-year .el-select__placeholder').style.color = '#a8abb2'
+
+  ElMessage(`选择第 ${value} 个指标数据`)
+}
+
+function handlerYearDataSelect(value){
+  radio1.value = ''
+  document.querySelector('.select-year .el-select__wrapper').style.border = '1px solid #409eff'
+  document.querySelector('.select-year .el-select__placeholder').style.color = '#3C7EF9'
+
+  ElMessage(`选择第 ${value} 个指标数据`)
 }
 
 // 地图
@@ -292,7 +318,7 @@ function initChart2(){
     yAxis: {
       type: 'category',
       // 数据反向
-      data: ['已入库', '已反馈', '已下发', '扫描金额', '扫描数量'],
+      data: ['已入库', '已反馈', '已下发', '涉及企业', '扫描数量'],
       splitLine: {
         show:false,
         lineStyle: {
@@ -711,18 +737,19 @@ nextTick(()=>{
             </div>
             <div class="content-box">
               <div class="content">
-                <el-radio-group v-model="radio1" size="large" @change="handlerYearDataBtn">
-                  <el-radio-button label="指标一" value="1" />
-                  <el-radio-button label="指标二" value="2" />
-                  <el-radio-button label="指标三" value="3" />
-                  <el-radio-button label="指标四" value="4" />
-                  <el-radio-button label="指标五" value="5" />
-                  <el-radio-button label="指标六" value="6" />
-                  <el-radio-button label="指标七" value="7" />
-                  <el-radio-button label="指标八" value="8" />
-                  <el-radio-button label="指标九" value="9" />
-                  <el-radio-button label="指标十" value="10" />
+                <el-radio-group v-model="radio1" size="large" @change="handlerYearDataRadio">
+                  <el-radio-button label="总览" value="all" />
                 </el-radio-group>
+                <el-select v-model="year_select" :fit-input-width="true" placeholder="请选择指标名称" class="select-year" @change="handlerYearDataSelect">
+                  <el-option
+                      v-for="item in year_select_options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                      :title="item.label"
+                  />
+                  <!--                        :disabled="item.disabled"-->
+                </el-select>
               </div>
               <div class="footer">
                 <div class="f-top">2018 - 2024</div>
@@ -757,7 +784,7 @@ nextTick(()=>{
                         <span class="c c1">29</span>
                       </div>
                       <div class="box">
-                        <span class="t">扫描金额</span>
+                        <span class="t">涉及企业</span>
                         <span class="c c2">81</span>
                       </div>
                       <div class="box">
@@ -1081,7 +1108,7 @@ nextTick(()=>{
             .ec-info {
               color: #3386D4; // 搭配背景颜色的文字颜色
               background: none;
-              height: 30%;
+              height: 300px;
               border: 1px solid #536691;
 
               p {
@@ -1115,6 +1142,31 @@ nextTick(()=>{
                   border-color: #409eff;
                   box-shadow: none;
                 }
+              }
+            }
+
+            :deep(.el-select) {
+              width: 100% !important;
+
+
+              .el-select__wrapper {
+                width: 100%;
+                background: none;
+                box-shadow: none;
+                //border: 1px solid #409eff;
+                border: 1px solid white;
+
+
+                .el-select__selected-item  {
+                  background: none;
+                  width: 100%;
+                }
+              }
+
+              //下拉框
+              .el-input__inner{
+                border: none;
+                color: white;
               }
             }
           }
@@ -1450,5 +1502,9 @@ nextTick(()=>{
   }
 }
 
+
+:deep(.el-select-dropdown){
+  white-space: normal;
+}
 
 </style>
