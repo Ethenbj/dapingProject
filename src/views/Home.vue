@@ -7,6 +7,7 @@ import type {TabsInstance} from 'element-plus'
 import {ElMessage} from 'element-plus'
 import {useStore} from 'vuex'
 import {merge} from "jquery";
+import danwei_zhuanhuan from "@/utils/money_change.ts";
 
 const router = new useRouter();
 const store = new useStore();
@@ -41,11 +42,19 @@ onMounted(() => {
   // echarts2 、 3 的状态
   if(store.state.home_left_top_state != ""){
     incomeTab.value = store.state.home_left_top_state;
-    if(incomeTab.value === 'left-top-min'){
-      initChart2();
+    if(incomeTab.value === 'left-top-right'){
+      incomeTab_active_dom = initChart3();
+      incomeTab_active_dom.on("click", function (e) {
+        store.commit('set_title',{title: e.name})
+        router.push({path: '/incomeArea'})
+      });
     }
   }else{
-    initChart2();
+  incomeTab_active_dom = initChart3();
+    incomeTab_active_dom.on("click", function (e) {
+      store.commit('set_title',{title: e.name})
+      router.push({path: '/incomeArea'})
+    });
   }
 
   let shui_srs = [];
@@ -61,21 +70,22 @@ onMounted(() => {
     fs_srs.push(fs_sr)
     let fz = years[i].content.split('、')
     if (y%2 !== 0){
-      document.getElementById("time-line-right-"+y).style.height = '65px'
+      document.getElementById("time-line-right-"+y).style.height = '225px'
       document.getElementById("time-line-right-"+y).style.width = '250px'
       document.getElementById("time-line-right-"+y).style.marginLeft = '-38px'
       if (fz.length > 0) {
         let dom = document.getElementById("time-line-right-" + y);
         let success_dom = dom.parentNode.parentNode.querySelector('.content');
+        fz.sort((a,b) => b.length - a.length)
         for (let t in fz) {
           let html_dom = document.createElement('p');
           html_dom.setAttribute('class', 'text-su')
-          html_dom.setAttribute('style', 'text-align:center; font-size: 12px;text-align:right;')
+          html_dom.setAttribute('style', 'text-align:center; font-size: 12px;text-align:center;')
           if (fz[t] !== '') {
             if (y === '2018'){
-              html_dom.innerText = fz[t]+' *';
+              html_dom.innerText = fz[t];
             }else{
-              html_dom.innerText = fz[t]+' ·';
+              html_dom.innerText = fz[t];
             }
           }
 
@@ -85,26 +95,26 @@ onMounted(() => {
 
       initChart4(y,shui_srs,sbf_srs,fs_srs);
     }else{
-      document.getElementById("time-line-right-"+y).style.height = '65px'
+      document.getElementById("time-line-right-"+y).style.height = '225px'
       document.getElementById("time-line-right-"+y).style.width = '250px'
       document.getElementById("time-line-right-"+y).style.marginRight = '-38px'
 
       if (fz.length > 0) {
         let dom = document.getElementById("time-line-right-" + y);
         let success_dom = dom.parentNode.parentNode.querySelector('.content');
+        fz.sort((a,b) => b.length - a.length)
         for (let t in fz) {
           let html_dom = document.createElement('p');
           html_dom.setAttribute('class', 'text-su')
-          html_dom.setAttribute('style', 'text-align:center; font-size: 12px;text-align:left;')
+          html_dom.setAttribute('style', 'text-align:center; font-size: 12px;text-align:center;')
 
           if (fz[t] !== '') {
             if (y === '2018'){
-              html_dom.innerText = '* '+ fz[t];
+              html_dom.innerText = fz[t];
             }else{
-              html_dom.innerText = '· '+ fz[t];
+              html_dom.innerText = fz[t];
             }
           }
-
 
           success_dom.appendChild(html_dom)
         }
@@ -266,7 +276,6 @@ const first_year_feizhong_sr = [
 
 // 去年市州收入
 const last_city_sr = [
-  {'14300':	2074045001.3},
   {'14301':	55890854908},
   {'14302':	6555919738.2},
   {'14303':	3499240224.2},
@@ -286,7 +295,6 @@ const last_city_sr = [
 
 // 代码城市对照
 const city_code_map = {
-  '14300': '湖南省',
   '14301': '长沙市',
   '14302': '株洲市',
   '14303': '湘潭市',
@@ -323,7 +331,6 @@ const city_code_map = {
 
 // 今年市州收入
 const first_city_sr = [
-  {'14300':	222672248.65},
   {'14301':	30789876584},
   {'14302':	5189238387.9},
   {'14303':	2056201127.1},
@@ -465,7 +472,8 @@ const getScale = (width = 1920, height = 1080) => {
 function initChart(){
   const myChart = init(document.getElementById('left-top-left') as HTMLDivElement)
 
-  const bili = [30,21,15,15,10,10,8,8,5,3];
+  // 用于固定比例显示数值
+  const bili = [30,28,26,25,24,21,20,19,18,17,15,13,12,11,10,10,9,9,8,8,7,7,6,6,5,5,4];
 
   let d:object[] = [];
   first_year_feizhong_sr.forEach((item, index)=>{
@@ -473,7 +481,9 @@ function initChart(){
       "value": 0,
       "name": "",
       "bfb": 0,
+      "item": "",
       "total": 0,
+      "total_zhuanhuan": "",
     };
     for (let itemKey in item) {
       if (item[itemKey] == 0){
@@ -484,7 +494,8 @@ function initChart(){
         d1.bfb = parseFloat((((item[itemKey] / last_year_feizhong_sr[index][itemKey]) - 1) * 100).toFixed(2))
       }
       d1.name = feizhong_names[index][itemKey]
-      d1.total  = item[itemKey]
+      d1.item = feizhong_names[index][itemKey]
+      d1.total = item[itemKey]
     }
     d.push(d1)
   })
@@ -492,10 +503,12 @@ function initChart(){
   d.sort((a,b)=> b.total - a.total )
 
   let data = [];
-  data = d.slice(0,10)
+  // data = d.slice(0,20)
+  data = d
 
   data.forEach((item, index) => {
     data[index]['value'] = bili[index]
+    data[index]['total_zhuanhuan'] = (data[index]['total'] / 100000000).toFixed(2)
   })
 
 
@@ -549,7 +562,7 @@ function initChart(){
   // 判断比例选择对应颜色
   for (let n in data) {
     let bili = data[n]['bfb'];
-    data[n]['name'] = data[n]['name'] + ' ' + bili + '%'
+    data[n]['name'] = data[n]['name']
     if (bili < 0) {
       for(let x in color['down_pd']) {
         if(bili <= color['down_pd'][x] && bili > color['down_pd'][parseInt(x)+1]) {
@@ -565,7 +578,7 @@ function initChart(){
           break;
         }
       }
-      data[n]['bfb'] = Math.abs(bili);
+      // data[n]['bfb'] = Math.abs(bili);
     }else{
       for(let x in color['up_pd']){
         if(bili >= color['up_pd'][x] && bili < color['up_pd'][parseInt(x)+1]) {
@@ -602,7 +615,8 @@ function initChart(){
       formatter(params) {
         //params 主要在上面的代码中push进去 自己所需的数据 params的data就能拿到
         let p = params.data;
-        return p.name+' '+p.total+'万元';
+        // p.name+'\n'+p.total+'万元\n'+ p.bfb + '%'
+        return '<div style="text-align: left">'+p.name+'<br>'+p.total_zhuanhuan+'亿元<br>'+p.bfb+'%</div>';
       }
     },
     series: [{
@@ -618,14 +632,21 @@ function initChart(){
       label: { //描述了每个矩形中，文本标签的样式。
         normal: {
           show: true,
-          position: ['10%', '40%']
+          position: ['0%', '0%'],
+          formatter(params) {
+            //params 主要在上面的代码中push进去 自己所需的数据 params的data就能拿到
+            let p = params.data;
+            // // p.name+'\n'+p.total+'万元\n'+ p.bfb + '%'
+            return p.name+'\n'+p.total_zhuanhuan+'亿元\n'+p.bfb+'%';
+          },
+          fontSize: 14,
         }
       },
       itemStyle: {
         normal: {
           show: true,
           textStyle: {
-            // color: '#fff',
+            // color: '#ff0000',
             fontSize: 14,
           },
           borderWidth: 1,
@@ -670,6 +691,10 @@ function initChart2(start?: number, end?: number){
   // 其他非税收入插入
   xdata.push('其他非税收入')
   ydata.push(qita);
+
+  ydata.forEach((item,index)=>{
+    ydata[index] = Number((item / 100000000).toFixed(2));
+  })
 
   // var xdata = ["教育费附加","地方教育附加","残疾人保障金","文化事业建设费","水利建设基金","工会经费","电力能源类","水土保持补偿费","排污权出让收入",
   //   "防空地下室易地建设费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","土地及土地面建筑","停车泊位费","国家重大水利工程建设基金收入"];
@@ -750,9 +775,9 @@ function initChart2(start?: number, end?: number){
     grid:{
       show:false,
       top:'5%',
-      right:'5%',
+      right:'2%',
       bottom:'32%',
-      left:'16%'
+      left:'12%'
     },
     series: [
       {
@@ -804,30 +829,43 @@ function initChart3(){
   first_city_sr.forEach((item, index)=>{
     for (let itemKey in item) {
       xData.push(city_code_map[itemKey])
-      if (item[itemKey] ==0){
-        lastYearData.push(100)
+      let y_data = {
+        value: 0,
+        bfb: 0,
+        city: ""
+      }
+      y_data.city = city_code_map[itemKey];
+      if (item[itemKey] == 0){
+        y_data.value = 0
+        y_data.bfb = 100
+        lastYearData.push(y_data)
         thisYearData.push('')
       }else if(last_city_sr[index][itemKey] == 0){
+        y_data.value = 0
+        y_data.bfb = 100
         lastYearData.push('')
-        thisYearData.push(100)
+        thisYearData.push(y_data)
       }else{
         let n = (((item[itemKey] / last_city_sr[index][itemKey]) - 1) * 100).toFixed(2);
         if (n < 0){
-          lastYearData.push(Math.abs(Number(n)))
+          y_data.value = Number((item[itemKey] / 100000000).toFixed(2))
+          y_data.bfb = Number(n)
+          lastYearData.push(y_data)
           thisYearData.push('')
         }else{
+          y_data.value = Number((item[itemKey] / 100000000).toFixed(2))
+          y_data.bfb = Number(n)
           lastYearData.push('')
-          thisYearData.push(n)
+          thisYearData.push(y_data)
         }
       }
     }
   })
 
   // var xData = ['长沙市', '岳阳市', '常德市', '衡阳市', '株洲市', '郴州市', '湘潭市','邵阳市','永州市','益阳市', '娄底市', '怀化市', '湘西州', '张家界市', '湘江新区']
-  var lineData = [100, 100, 100, 100, 100, 100, 100,100,100,100,100, 100,100,100,100,100]
+  // var lineData = [100, 100, 100, 100, 100, 100, 100,100,100,100,100, 100,100,100,100,100]
   // var lastYearData = [1, 2, 6.2, 3.4, 5.5, 6.5, 3.2,2.3,'', '', '', '', '', '', ''];
   // var thisYearData = ['', '', '', '', '', '', '', '', 1.4,2.1, 6.6, 7.9,3.4,3.4,2.1];
-
 
   var timeLineData = [1];
   let legend=['减少', '增长'];
@@ -853,11 +891,32 @@ function initChart3(){
   borderData = xData.map(item => {
     return scale;
   });
-  let option = {
+  let option:any = {
     baseOption: {
       backgroundColor: background,
       tooltip: {
-        show: false
+        show: true,
+        formatter: function(params) {
+          let p = params[0].data
+          if (p) {
+            return '<div style="text-align: left">' +
+                p.city + "</br>" + p.value + '亿元</br>' + p.bfb + '%' +
+                '</div>';
+          }
+        },
+        trigger: "axis",
+        axisPointer: {
+          type:'shadow',
+          shadowStyle :{
+            color:'rgba(48,95,237,0.1)'
+          }
+        },
+        backgroundColor: "rgba(255,255,255,1)",
+        padding: [5, 10],
+        textStyle: {
+          color: "#7588E4"
+        },
+        extraCssText: "box-shadow: 0 0 5px rgba(0,0,0,0.3)"
       },
       timeline: {
         show: false,
@@ -899,6 +958,7 @@ function initChart3(){
         width: '37%'
       }],
       xAxis: [{
+        max:400,
         type: 'value',
         inverse: true,
         axisLine: {
@@ -922,6 +982,7 @@ function initChart3(){
         gridIndex: 1,
         show: false
       }, {
+        max:400,
         gridIndex: 2,
         axisLine: {
           show: false
@@ -1013,7 +1074,6 @@ function initChart3(){
     },
     options: []
   }
-
   option.baseOption.timeline.data.push(timeLineData[0])
   option.options.push({
     series: [{
@@ -1036,8 +1096,13 @@ function initChart3(){
       },
       label: {
         normal: {
-          formatter: "-{c}%",
+          position: 'left',
+          formatter: function (params) {
+            let p = params.data;
+            return p.value+'亿元';
+          },
           show: true,
+          color: 'white'
         }
       },
       data: lastYearData,
@@ -1068,8 +1133,13 @@ function initChart3(){
         },
         label: {
           normal: {
-            formatter: "{c}%",
+            position: 'right',
+            formatter: function (params) {
+              let p = params.data;
+              return p.value+'亿元';
+            },
             show: true,
+            color: 'white',
           }
         },
         data: thisYearData,
@@ -1105,7 +1175,7 @@ function initChart4(y,shui_srs,sbf_srs,fs_srs){
     },
     tooltip: {
       show: true,
-      formatter: "{b}: {c}万元",
+      formatter: "{b}: {c}亿元",
       trigger: "item",
       axisPointer: {
         type:'shadow',
@@ -1121,7 +1191,7 @@ function initChart4(y,shui_srs,sbf_srs,fs_srs){
       extraCssText: "box-shadow: 0 0 5px rgba(0,0,0,0.3)"
     },
     xAxis: {
-      max:100000000,
+      max:4000,
       type: 'value',
       show: false,
       splitLine: {
@@ -1174,13 +1244,13 @@ function initChart4(y,shui_srs,sbf_srs,fs_srs){
       // name: "采样人数",
       tooltip: {
         trigger: 'item',
-        formatter: "税收收入: {c}万元",
+        formatter: "税收收入: {c}亿元",
       },
       itemStyle: {
         normal: {
           label: {
             show: true, //开启显示
-            position: 'right', //在上方显示  inside 中心  正数 向右 向下
+            position: 'inside', //在上方显示  inside 中心  正数 向右 向下
             textStyle: { //数值样式
               color: "rgba(250,250,250,0.6)",
               fontSize: 16,
@@ -1205,7 +1275,7 @@ function initChart4(y,shui_srs,sbf_srs,fs_srs){
         // name: "检测人数",
         tooltip: {
           trigger: 'item',
-          formatter: "社保费收入: {c}万元",
+          formatter: "社保费收入: {c}亿元",
         },
         itemStyle: {
           normal: {
@@ -1236,7 +1306,7 @@ function initChart4(y,shui_srs,sbf_srs,fs_srs){
         // name: "检测人数",
         tooltip: {
           trigger: 'item',
-          formatter: "非税收入: {c}万元",
+          formatter: "非税收入: {c}亿元",
         },
         itemStyle: {
           normal: {
@@ -1254,7 +1324,7 @@ function initChart4(y,shui_srs,sbf_srs,fs_srs){
               color: 'rgb(15,45,243)'
             }, {
               offset: 1,
-              color: 'rgba(15,87,243,0)'
+              color: 'rgba(15,45,243,0)'
             }]),
             borderWidth: 2,
             barBorderRadius:15
@@ -1284,7 +1354,7 @@ function initChart5(y,shui_srs,sbf_srs,fs_srs){
     },
     tooltip: {
       show: true,
-      formatter: "{b}: {c}万元",
+      formatter: "{b}: {c}亿元",
       trigger: "item",
       axisPointer: {
         type:'shadow',
@@ -1304,9 +1374,9 @@ function initChart5(y,shui_srs,sbf_srs,fs_srs){
       right: '3%',
     },
     xAxis: {
-      max:100000000,
+      max:4500,
       type: 'value',
-      position: 'right',
+      position: 'in',
       inverse: true,
       show: false,
       splitLine: {
@@ -1359,13 +1429,13 @@ function initChart5(y,shui_srs,sbf_srs,fs_srs){
       // name: "采样人数",
       tooltip: {
         trigger: 'item',
-        formatter: "税收收入: {c}万元",
+        formatter: "税收收入: {c}亿元",
       },
       itemStyle: {
         normal: {
           label: {
             show: true, //开启显示
-            position: 'left', //在上方显示
+            position: 'inside', //在上方显示
             textStyle: { //数值样式
               color: "rgba(250,250,250,0.6)",
               fontSize: 16,
@@ -1390,7 +1460,7 @@ function initChart5(y,shui_srs,sbf_srs,fs_srs){
         // name: "检测人数",
         tooltip: {
           trigger: 'item',
-          formatter: "社保费收入: {c}万元",
+          formatter: "社保费收入: {c}亿元",
         },
         itemStyle: {
           normal: {
@@ -1424,7 +1494,7 @@ function initChart5(y,shui_srs,sbf_srs,fs_srs){
         // name: "检测人数",
         tooltip: {
           trigger: 'item',
-          formatter: "非税收入: {c}万元",
+          formatter: "非税收入: {c}亿元",
         },
         itemStyle: {
           normal: {
@@ -1461,7 +1531,7 @@ function initChart5(y,shui_srs,sbf_srs,fs_srs){
 }
 
 // 费种、市州 .title-right-end
-const incomeTab = ref<TabsInstance['incomeTab']>('left-top-min');
+const incomeTab = ref<TabsInstance['incomeTab']>('left-top-right');
 
 let incomeTab_active_dom :unknown = '';
 // 监听
@@ -1501,10 +1571,10 @@ let change_card_data : {[key :string] : object} = {};
 
 // 左下角显示的数据（按项目）
 let item_data : {[key :string] : object} = {
-  'one': {'d':[1, 2, 3, 4, 5, 6],'c':[1, 2, 3, 4,5]},
-  'two': {'d':[11,22,33,44,55,66],'c':[11,22,33,44,55]},
-  'three':{'d':[111,222,333,444,555,666],'c':[111,222,333,444,555]},
-  'four':{'d':[1111,2222,3333,4444,5555,6666],'c':[1111,2222,3333,4444,5555]}
+  'one': {'d':[0,0,0,0,0,0],'c':[0,0,0,0,0]},
+  'two': {'d':[0,0,0,0,0,0],'c':[0,0,0,0,0]},
+  'three':{'d':[0,0,0,0,0,0],'c':[0,0,0,0,0]},
+  'four':{'d':[0,0,0,0,0,0],'c':[0,0,0,0,0]}
 }
 
 // 扫描疑点数据
@@ -1715,9 +1785,8 @@ const years = [
   {
     year: '2018',
     title: '2018年度情况',
-    content: '教育费附加、地方教育附加、残疾人就业保障金、水利建设基金、文化事业建设费、废弃电器电子产品处理基金、工会经费',
-    year_f_count: 10,
-    year_s_count: 5,
+    // content: '教育费附加、地方教育附加、残疾人就业保障金、水利建设基金、文化事业建设费、废弃电器电子产品处理基金、工会经费',
+    content: '',
     shui_sr: 41760375,
     sbf_sr: 128298,
     fs_sr: 1417760
@@ -1725,9 +1794,7 @@ const years = [
   {
     year: '2019',
     title: '2019年度情况',
-    content: '农网还贷基金、可再生能源发展基金、国家重大水利工程建设基金、大中型水库移民后期扶持基金、跨省际大中型水库库区基金、括广告收入、河道砂石资源开采权出让收入',
-    year_f_count: 20,
-    year_s_count: 41,
+    content: '农网还贷基金、可再生能源发展基金、国家重大水利工程建设基金、大中型水库移民后期扶持基金、跨省际大中型水库库区基金、广告收入、河道砂石资源开采权出让收入',
     shui_sr: 42135206,
     sbf_sr: 6111892,
     fs_sr: 2042964
@@ -1737,8 +1804,6 @@ const years = [
     year: '2020',
     title: '2020年度情况',
     content: '',
-    year_f_count: 30,
-    year_s_count: 15,
     shui_sr: 42222702,
     sbf_sr: 8134402,
     fs_sr: 1953922
@@ -1747,8 +1812,6 @@ const years = [
     year: '2021',
     title: '2021年度情况',
     content: '水土保持补偿费、排污权出让收入、地方水库移民扶持基金、防空地下室易地建设费、土地闲置费、成真垃圾处理费、河道砂石经营收益、生态环境损害赔偿金',
-    year_f_count: 15,
-    year_s_count: 7,
     shui_sr: 45072877,
     sbf_sr: 19202803,
     fs_sr: 2754313
@@ -1757,8 +1820,6 @@ const years = [
     year: '2022',
     title: '2022年度情况',
     content: '国有土地使用权出让收入、矿产资源专项收入、国有资产占用费、土地及地面建筑资产处置、非土地及地面建筑资产处置、破损公路及设施赔(补)偿费和占用费、停车泊位和公共停车场有偿使用收入',
-    year_f_count: 71,
-    year_s_count: 35,
     shui_sr: 39118268,
     sbf_sr: 21675309,
     fs_sr: 30636979
@@ -1767,23 +1828,25 @@ const years = [
     year: '2023',
     title: '2023年度情况',
     content: '森林植被恢复费',
-    year_f_count: 14,
-    year_s_count: 7,
     shui_sr: 43715324,
     sbf_sr: 23283013,
     fs_sr: 27155186
   },
-  {
-    year: '2024',
-    title: '2024年度情况',
-    content: '',
-    year_f_count: 12,
-    year_s_count: 6,
-    shui_sr: '',
-    sbf_sr: '',
-    fs_sr: ''
-  },
+  // {
+  //   year: '2024',
+  //   title: '2024年度情况',
+  //   content: '',
+  //   shui_sr: '',
+  //   sbf_sr: '',
+  //   fs_sr: ''
+  // },
 ]
+
+years.forEach(function (item, index) {
+  years[index].shui_sr = Number((item.shui_sr/10000).toFixed(2))
+  years[index].sbf_sr = Number((item.sbf_sr/10000).toFixed(2))
+  years[index].fs_sr = Number((item.fs_sr/10000).toFixed(2))
+})
 
 // 重点企业
 let enterpriseData = [
@@ -1883,7 +1946,7 @@ nextTick(()=>{
             <div class="left-top-left">
               <div class="title-box">
                 <div class="title">
-                  收入
+                  分费种收入
                 </div>
               </div>
               <div class="content-box">
@@ -1895,12 +1958,12 @@ nextTick(()=>{
             <div class="left-top-right">
               <div class="title-box">
                 <div class="title">
-                  本年缴费人数：<span class="count">8848</span>
+                  分市州收入
                 </div>
                 <div class="change-btn">
-                  <el-radio-group v-model="incomeTab">
-                    <el-radio-button value="left-top-min">费种</el-radio-button>
-                    <el-radio-button value="left-top-right">市州</el-radio-button>
+                  <el-radio-group v-model="incomeTab" class="top-content">
+<!--                    <el-radio-button value="left-top-min">费种</el-radio-button>-->
+<!--                    <el-radio-button value="left-top-right">市州</el-radio-button>-->
                   </el-radio-group>
                 </div>
               </div>
@@ -1992,6 +2055,7 @@ nextTick(()=>{
                                     <el-col>
                                       <div class="card-left-top">
                                         <el-row>
+                                          <span class="title-max">风险企业简报</span>
                                           <el-col :span="24">
                                             <el-card class="card-div-item card-1">
                                               <div class="qymc">
@@ -2016,14 +2080,6 @@ nextTick(()=>{
                                                 </div>
                                                 <div class="card-div-item-content">
                                                   主管税务分局内容主管税务分局内容
-                                                </div>
-                                              </div>
-                                              <div class="zzsxssr">
-                                                <div class="card-div-item-title">
-                                                  税务登记时间
-                                                </div>
-                                                <div class="card-div-item-content time">
-                                                  2022-03-01 15:16:17
                                                 </div>
                                               </div>
                                             </el-card>
@@ -2144,6 +2200,7 @@ nextTick(()=>{
                                     <el-col>
                                       <div class="card-left-top">
                                         <el-row>
+                                          <span class="title-max">风险企业简报</span>
                                           <el-col :span="24">
                                             <el-card class="card-div-item card-1">
                                               <div class="qymc">
@@ -2168,14 +2225,6 @@ nextTick(()=>{
                                                 </div>
                                                 <div class="card-div-item-content">
                                                   主管税务分局内容主管税务分局内容
-                                                </div>
-                                              </div>
-                                              <div class="zzsxssr">
-                                                <div class="card-div-item-title">
-                                                  税务登记时间
-                                                </div>
-                                                <div class="card-div-item-content time">
-                                                  2022-03-01 15:16:17
                                                 </div>
                                               </div>
                                             </el-card>
@@ -2324,7 +2373,8 @@ nextTick(()=>{
 
                         </div>
                         <div class="content">
-                          <el-tag v-if="year.content !== ''" type="success" class="el-tag-success">新增</el-tag>
+                          <el-tag v-if="year.content !== ''" type="success" class="el-tag-success">—————— <el-tag style="background:none;border:0;color: #409EFF">新增</el-tag> ——————</el-tag>
+                          <el-tag v-if="year.content == ''" type="success" class="el-tag-success">—————— <el-tag style="background:none;border:0;color: #409EFF">无变化</el-tag> ——————</el-tag>
                         </div>
                       </div>
                     </v-timeline-item>
@@ -2786,6 +2836,14 @@ nextTick(()=>{
                         border-top-left-radius: 4px;
                       }
 
+                      .title-max{
+                        font-size: 1.5rem;
+                        color: #0091ea !important;
+                        text-align: center;
+                        width: 100%;
+                        padding: 10px 0 0 0;
+                      }
+
                       .card-div-item-title{
                         text-align: left;
                         font-size: 0.9rem;
@@ -2938,13 +2996,26 @@ nextTick(()=>{
               height: @base-height - 275px;
               overflow-y: auto;
               overflow-x: hidden;
+
+              :deep(.v-timeline-divider){
+                .v-timeline-divider__before{
+                  height: 100%;
+                }
+                .v-timeline-divider__dot{
+                  margin-top: 92px;
+                }
+              }
+
               .content{
                 width: auto;
+                margin-top: 63px;
                 .el-tag-success{
-                  background-color: rgba(34, 45, 29, 0.43);
-                  //background: none;
-                  border-color: #334d26;
-                  color: #67c23a;
+                  //background-color: rgba(82, 206, 107, 0.1);
+                  background: none;
+                  //border-color: rgba(211, 255, 240, 0.46);
+                  color: #007e9a;
+                  margin-bottom: 10px;
+                  border: 0;
                 }
                 .text-su{
                   text-align: center;

@@ -26,7 +26,7 @@ const router = createRouter({
             //路径
             path: '/',
             meta: {
-                requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
+                // requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录的
             },
             //组件绑定
             // @ts-ignore

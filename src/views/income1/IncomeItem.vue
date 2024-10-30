@@ -17,8 +17,13 @@
   onMounted(()=>{
       // 初始化 echarts
       initChart();
-      initChart2();
+      // initChart2();
       initChart3();
+
+      htongjitu1();
+      htongjitu2();
+      htongjitu3();
+
 
       // 替换返回符号
       document.querySelector('.el-page-header__title').remove()
@@ -179,7 +184,417 @@
     dom.querySelector('div').style.height = '0';
   }
 
-  // 缴费人数情况
+  function htongjitu1(){
+    var chartDom = document.getElementById('htongjitu1');
+    var myChart = echarts.init(chartDom);
+
+    //初始化数据
+    var category = ['长沙市', '岳阳市', '常德市', '衡阳市', '郴州市', '湘潭市', '邵阳市', '永州市','益阳市','娄底市','怀化市','湘西州','张家界市','湘江新区','株洲市'];
+    var barData = [163, 212, 218, 581, 431, 383, 163,163, 212, 218, 581, 431, 383, 163,153];
+
+    var option = {
+      title: {
+        subtext: '应申报',
+        // x 设置水平安放位置，默认左对齐，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+        x: '150',
+        // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+        y: '10',
+        // itemGap设置主副标题纵向间隔，单位px，默认为10，
+        itemGap: 30,
+        // 副标题文本样式设置
+        subtextStyle: {
+          fontWeight: 'bold',
+          fontSize: 14,
+          color: 'white'
+        }
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      grid: {
+        left: '0%',
+        right: '4%',
+        bottom: '4%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'value',
+        max: 1000,
+        axisLine: {
+          show: false
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel:{
+          show: false
+        }, //显示x轴的数值
+        splitLine: {
+          show: false
+        },
+        boundaryGap: ['5%', '50%'],//留白大小，坐标轴两边留白
+      },
+      yAxis: {
+        type: 'category',
+        data: category,
+        //升序
+        inverse: true,
+        axisLabel: {
+          margin: 65,
+          align: 'left',
+          textStyle: {
+            color: 'white'
+          }
+        },
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color:"#10306BA5",//线条颜色
+            type:"dashed"//线条样式，默认是实现，dashed是虚线
+          },
+        },
+        axisTick: {
+          show: false
+        },
+        offset: 10,
+        nameTextStyle: {
+          fontSize: 15
+        },
+        // boundaryGap: ['5%', '20%'],//留白大小，坐标轴两边留白
+      },
+      series: [
+        {
+          name: '数量',
+          type: 'bar',
+          data: barData,
+          barWidth: 20,
+          barGap: 10,
+          smooth: true,
+          label: {
+            normal: {
+              show: true,
+              position: 'right',
+              // offset: [1, -10],
+              textStyle: {
+                // color: '#F68300',
+                color: 'white',
+                fontSize: 13
+              }
+            }
+          },
+          itemStyle: {
+            emphasis: {
+              // barBorderRadius: 7
+            },
+            normal: {
+              // barBorderRadius: 7,
+              // color: new echarts.graphic.LinearGradient(
+              //     0, 0, 1, 0,
+              //     [
+              //       {offset: 0, color: '#b0e7f0'},
+              //       // {offset: 1, color: '#37BBF8'}
+              //
+              //     ]
+              // )
+
+              color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+                offset: 0,
+                color: 'rgb(255,255,255)'
+              }, {
+                offset: 1,
+                color: 'rgba(255,255,255,0)'
+              }]),
+              borderWidth: 2,
+              barBorderRadius:15
+            }
+          }
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+
+    return myChart;
+  }
+  function htongjitu2(){
+    var chartDom = document.getElementById('htongjitu2');
+    var myChart = echarts.init(chartDom);
+
+    //初始化数据
+    var category = ['长沙市', '岳阳市', '常德市', '衡阳市', '郴州市', '湘潭市', '邵阳市', '永州市','益阳市','娄底市','怀化市','湘西州','张家界市','湘江新区','株洲市'];
+    var barData = [163, 212, 218, 581, 431, 383, 163,163, 212, 218, 581, 431, 383, 163,153];
+
+    var option = {
+      title: {
+        subtext: '已申报',
+        // x 设置水平安放位置，默认左对齐，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+        x: 'center',
+        // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+        y: '10',
+        // itemGap设置主副标题纵向间隔，单位px，默认为10，
+        itemGap: 30,
+        // 副标题文本样式设置
+        subtextStyle: {
+          fontWeight: 'bold',
+          fontSize: 14,
+          color: 'white'
+        }
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      grid: {
+        left: '0%',
+        right: '4%',
+        bottom: '4%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'value',
+        max: 1000,
+        axisLine: {
+          show: false
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel:{
+          show: false
+        }, //显示x轴的数值
+        splitLine: {
+          show: false
+        },
+        boundaryGap: ['5%', '50%'],//留白大小，坐标轴两边留白
+      },
+      yAxis: {
+        type: 'category',
+        data: category,
+        //升序
+        inverse: true,
+        axisLabel: {
+          show: false
+        },
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color:"#10306BA5",//线条颜色
+            type:"dashed"//线条样式，默认是实现，dashed是虚线
+          },
+        },
+        axisTick: {
+          show: false
+        },
+        offset: 10,
+        nameTextStyle: {
+          fontSize: 15
+        },
+        // boundaryGap: ['5%', '20%'],//留白大小，坐标轴两边留白
+      },
+      series: [
+        {
+          name: '数量',
+          type: 'bar',
+          data: barData,
+          barWidth: 20,
+          barGap: 10,
+          smooth: true,
+          label: {
+            normal: {
+              show: true,
+              position: 'right',
+              // offset: [1, -10],
+              textStyle: {
+                // color: '#F68300',
+                color: 'white',
+                fontSize: 13
+              }
+            }
+          },
+          itemStyle: {
+            emphasis: {
+              // barBorderRadius: 7
+            },
+            normal: {
+              // barBorderRadius: 7,
+              // color: new echarts.graphic.LinearGradient(
+              //     0, 0, 1, 0,
+              //     [
+              //       {offset: 0, color: '#e2e7f0'},
+              //       // {offset: 1, color: '#37BBF8'}
+              //
+              //     ]
+              // )
+
+              color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+                offset: 0,
+                color: 'rgba(0,255,255,1)'
+              }, {
+                offset: 1,
+                color: 'rgb(15,255,255,0)'
+              }]),
+              borderWidth: 2,
+              barBorderRadius:15
+            }
+          }
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+
+    return myChart;
+  }
+  function htongjitu3(){
+    var chartDom = document.getElementById('htongjitu3');
+    var myChart = echarts.init(chartDom);
+
+    //初始化数据
+    var category = ['长沙市', '岳阳市', '常德市', '衡阳市', '郴州市', '湘潭市', '邵阳市', '永州市','益阳市','娄底市','怀化市','湘西州','张家界市','湘江新区','株洲市'];
+    var barData = [23, 22, 28, 58, 43, 33, 63,63, 12, 21, 51, 41, 83, 13,100];
+
+    var option = {
+      title: {
+        subtext: '申报比例',
+        // x 设置水平安放位置，默认左对齐，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+        x: 'center',
+        // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+        y: '10',
+        // itemGap设置主副标题纵向间隔，单位px，默认为10，
+        itemGap: 30,
+        // 副标题文本样式设置
+        subtextStyle: {
+          fontWeight: 'bold',
+          fontSize: 14,
+          color: 'white',
+        }
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      grid: {
+        left: '0%',
+        right: '25%',
+        bottom: '4%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'value',
+        max: 100,
+        axisLine: {
+          show: false
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel:{
+          show: false
+        }, //显示x轴的数值
+        splitLine: {
+          show: false
+        },
+        boundaryGap: ['5%', '50%'],//留白大小，坐标轴两边留白
+      },
+      yAxis: {
+        type: 'category',
+        data: category,
+        //升序
+        inverse: true,
+        axisLabel: {
+          show: false
+        },
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color:"#10306BA5",//线条颜色
+            type:"dashed"//线条样式，默认是实现，dashed是虚线
+          },
+        },
+        axisTick: {
+          show: false
+        },
+        offset: 10,
+        nameTextStyle: {
+          fontSize: 15
+        },
+        // boundaryGap: ['5%', '20%'],//留白大小，坐标轴两边留白
+      },
+      series: [
+        {
+          name: '百分比',
+          type: 'bar',
+          data: barData,
+          barWidth: 20,
+          barGap: 10,
+          smooth: true,
+          label: {
+            normal: {
+              show: true,
+              position: 'right',
+              // offset: [1, -10],
+              textStyle: {
+                // color: '#F68300',
+                color: 'white',
+                fontSize: 13
+              },
+              formatter: function (params){
+                let p = params.data
+                return `${p}%`;
+              }
+            }
+          },
+          itemStyle: {
+            emphasis: {
+              // barBorderRadius: 7
+            },
+            normal: {
+              // barBorderRadius: 7,
+              // color: new echarts.graphic.LinearGradient(
+              //     0, 0, 1, 0,
+              //     [
+              //       {offset: 0, color: '#5994ff'},
+              //       // {offset: 1, color: '#37BBF8'}
+              //     ]
+              // )
+
+              color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+                offset: 0,
+                color: 'rgb(15,45,243)'
+              }, {
+                offset: 1,
+                color: 'rgba(15,45,243,0)'
+              }]),
+              borderWidth: 2,
+              barBorderRadius:15
+            }
+          }
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+
+    return myChart;
+  }
+
+  // 申报情况
   function initChart2(){
     const myChart = init(document.getElementById('bar') as HTMLDivElement)
 
@@ -597,7 +1012,16 @@
     }
   })
 
+  // 历年数据选择下拉框
+  const year_select = ["2023","2022","2021","2020","2019","2018"];
 
+  const year_select_options = [];
+  year_select.forEach((item, index) => {
+    year_select_options.push({
+      label: item,
+      value: item+'年数据'
+    });
+  })
 </script>
 
 
@@ -626,12 +1050,14 @@
                 </el-card>
                 <el-radio-group v-model="radio1" size="large" @change="handlerYearDataBtn">
                   <el-radio-button label="2024年数据" value="2024" />
-                  <el-radio-button label="2023年数据" value="2023" />
-                  <el-radio-button label="2022年数据" value="2022" />
-                  <el-radio-button label="2021年数据" value="2021" />
-                  <el-radio-button label="2020年数据" value="2020" />
-                  <el-radio-button label="2019年数据" value="2019" />
-                  <el-radio-button label="2018年数据" value="2018" />
+                  <el-select-v2
+                      v-model="year_select"
+                      filterable
+                      :options="year_select_options"
+                      placeholder="请选择历年数据"
+                      style="width: 240px; margin-right: 16px; vertical-align: middle"
+                      multiple
+                  />
                 </el-radio-group>
               </div>
               <div class="footer">
@@ -657,10 +1083,20 @@
               <div class="main-left-bottom">
                 <div class="title-box">
                   <div class="title">
-                    缴费人数情况
+                    申报情况
                   </div>
                 </div>
-                <div id="bar"></div>
+                <el-row id="bar">
+                  <el-col :span="10">
+                    <div class="col-xxl-6 htongjitu" id="htongjitu1"></div>
+                  </el-col>
+                  <el-col :span="7">
+                    <div class="col-xxl-3 htongjitu" id="htongjitu2"></div>
+                  </el-col>
+                  <el-col :span="7">
+                    <div class="col-xxl-3 htongjitu" id="htongjitu3"></div>
+                  </el-col>
+                </el-row>
               </div>
             </el-col>
             <el-col :span="24" class="main-right">
@@ -1093,6 +1529,14 @@
               background-size: 100% 100%;
               flex: 1;
               white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
+              display: flex;
+              flex-direction: row;
+              .el-col{
+                flex: 1;
+                .htongjitu{
+                  height: 100%;
+                }
+              }
             }
           }
         }

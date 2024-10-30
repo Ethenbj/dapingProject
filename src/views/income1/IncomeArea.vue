@@ -16,8 +16,13 @@ const store = useStore()
 onMounted(()=>{
   // 初始化 echarts
   initChart();
-  initChart2();
+  // initChart2();
   initChart3();
+
+  htongjitu1();
+  htongjitu2();
+  htongjitu3();
+
 
   // 替换返回符号
   document.querySelector('.el-page-header__title').remove()
@@ -334,9 +339,421 @@ function autoHover(myChart, option, num, time, echartData) {
   });
 }
 
+function htongjitu1(){
+  var chartDom = document.getElementById('htongjitu1');
+  var myChart = echarts.init(chartDom);
 
+  //初始化数据
+  var category = ["教育费附加","地方教育附加","残疾人保障金","文化事业建设费","水利建设基金","工会经费","电力能源类","水土保持补偿费","排污权出让收入",
+    "防空地下室易地建设费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","非经营性国有资产收入","土地及土地面建筑","停车泊位费","其他省级非税收入","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
+  var barData = [163, 212, 218, 581, 431, 383, 163,163, 212, 218, 581, 431, 383, 383,163,153,163, 212, 218, 581, 431, 383, 163,163];
 
-// 缴费人数情况
+  var option = {
+    title: {
+      subtext: '应申报',
+      // x 设置水平安放位置，默认左对齐，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+      x: '150',
+      // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+      y: '10',
+      // itemGap设置主副标题纵向间隔，单位px，默认为10，
+      itemGap: 30,
+      // 副标题文本样式设置
+      subtextStyle: {
+        fontWeight: 'bold',
+        fontSize: 14,
+        color: 'white'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '0%',
+      right: '4%',
+      bottom: '4%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'value',
+      max: 1000,
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      },
+      axisLabel:{
+        show: false
+      }, //显示x轴的数值
+      splitLine: {
+        show: false
+      },
+      boundaryGap: ['5%', '50%'],//留白大小，坐标轴两边留白
+    },
+    yAxis: {
+      type: 'category',
+      data: category,
+      //升序
+      inverse: true,
+      axisLabel: {
+        margin: 65,
+        align: 'left',
+        textStyle: {
+          color: 'white',
+          fontSize: 10
+        }
+      },
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color:"#10306BA5",//线条颜色
+          type:"dashed"//线条样式，默认是实现，dashed是虚线
+        },
+      },
+      axisTick: {
+        show: false
+      },
+      offset: 50,
+      nameTextStyle: {
+        fontSize: 15
+      },
+      // boundaryGap: ['5%', '20%'],//留白大小，坐标轴两边留白
+    },
+    series: [
+      {
+        name: '数量',
+        type: 'bar',
+        data: barData,
+        barWidth: 10,
+        barGap: 10,
+        smooth: true,
+        label: {
+          normal: {
+            show: true,
+            position: 'right',
+            // offset: [1, -10],
+            textStyle: {
+              // color: '#F68300',
+              color: 'white',
+              fontSize: 13
+            }
+          }
+        },
+        itemStyle: {
+          emphasis: {
+            // barBorderRadius: 7
+          },
+          normal: {
+            // barBorderRadius: 7,
+            // color: new echarts.graphic.LinearGradient(
+            //     0, 0, 1, 0,
+            //     [
+            //       {offset: 0, color: '#b0e7f0'},
+            //       // {offset: 1, color: '#37BBF8'}
+            //
+            //     ]
+            // )
+
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+              offset: 0,
+              color: 'rgb(255,255,255)'
+            }, {
+              offset: 1,
+              color: 'rgba(255,255,255,0)'
+            }]),
+            borderWidth: 2,
+            barBorderRadius:15
+          }
+        }
+      }
+    ]
+  };
+
+  option && myChart.setOption(option);
+
+  return myChart;
+}
+function htongjitu2(){
+  var chartDom = document.getElementById('htongjitu2');
+  var myChart = echarts.init(chartDom);
+
+  //初始化数据
+  var category = ["教育费附加","地方教育附加","残疾人保障金","文化事业建设费","水利建设基金","工会经费","电力能源类","水土保持补偿费","排污权出让收入",
+    "防空地下室易地建设费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","非经营性国有资产收入","土地及土地面建筑","停车泊位费","其他省级非税收入","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
+  var barData = [163, 212, 218, 581, 431, 383, 163,163, 212, 218, 581, 431, 383, 383,163,153,163, 212, 218, 581, 431, 383, 163,163];
+
+  var option = {
+    title: {
+      subtext: '已申报',
+      // x 设置水平安放位置，默认左对齐，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+      x: 'center',
+      // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+      y: '10',
+      // itemGap设置主副标题纵向间隔，单位px，默认为10，
+      itemGap: 30,
+      // 副标题文本样式设置
+      subtextStyle: {
+        fontWeight: 'bold',
+        fontSize: 14,
+        color: 'white'
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '0%',
+      right: '4%',
+      bottom: '4%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'value',
+      max: 1000,
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      },
+      axisLabel:{
+        show: false
+      }, //显示x轴的数值
+      splitLine: {
+        show: false
+      },
+      boundaryGap: ['5%', '50%'],//留白大小，坐标轴两边留白
+    },
+    yAxis: {
+      type: 'category',
+      data: category,
+      //升序
+      inverse: true,
+      axisLabel: {
+        show: false
+      },
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color:"#10306BA5",//线条颜色
+          type:"dashed"//线条样式，默认是实现，dashed是虚线
+        },
+      },
+      axisTick: {
+        show: false
+      },
+      offset: 10,
+      nameTextStyle: {
+        fontSize: 15
+      },
+      // boundaryGap: ['5%', '20%'],//留白大小，坐标轴两边留白
+    },
+    series: [
+      {
+        name: '数量',
+        type: 'bar',
+        data: barData,
+        barWidth: 10,
+        barGap: 10,
+        smooth: true,
+        label: {
+          normal: {
+            show: true,
+            position: 'right',
+            // offset: [1, -10],
+            textStyle: {
+              // color: '#F68300',
+              color: 'white',
+              fontSize: 13
+            }
+          }
+        },
+        itemStyle: {
+          emphasis: {
+            // barBorderRadius: 7
+          },
+          normal: {
+            // barBorderRadius: 7,
+            // color: new echarts.graphic.LinearGradient(
+            //     0, 0, 1, 0,
+            //     [
+            //       {offset: 0, color: '#e2e7f0'},
+            //       // {offset: 1, color: '#37BBF8'}
+            //
+            //     ]
+            // )
+
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+              offset: 0,
+              color: 'rgba(0,255,255,1)'
+            }, {
+              offset: 1,
+              color: 'rgb(15,255,255,0)'
+            }]),
+            borderWidth: 2,
+            barBorderRadius:15
+          }
+        }
+      }
+    ]
+  };
+
+  option && myChart.setOption(option);
+
+  return myChart;
+}
+function htongjitu3(){
+  var chartDom = document.getElementById('htongjitu3');
+  var myChart = echarts.init(chartDom);
+
+  //初始化数据
+  var category = ["教育费附加","地方教育附加","残疾人保障金","文化事业建设费","水利建设基金","工会经费","电力能源类","水土保持补偿费","排污权出让收入",
+    "防空地下室易地建设费","城镇垃圾处理费","土地闲置费","土地出让金","矿产资源专项收入","森林植被恢复费","河道砂石收入","非经营性国有资产收入","土地及土地面建筑","停车泊位费","其他省级非税收入","河道砂石收入","土地及土地面建筑","停车泊位费","其他省级非税收入"];
+  var barData = [23, 22, 28, 58, 43, 33, 63,63, 12, 21, 51, 41, 83, 13,100,23, 22, 28, 58, 43, 33, 63,63, 12];
+
+  var option = {
+    title: {
+      subtext: '申报比例',
+      // x 设置水平安放位置，默认左对齐，可选值：'center' ¦ 'left' ¦ 'right' ¦ {number}（x坐标，单位px）
+      x: 'center',
+      // y 设置垂直安放位置，默认全图顶端，可选值：'top' ¦ 'bottom' ¦ 'center' ¦ {number}（y坐标，单位px）
+      y: '10',
+      // itemGap设置主副标题纵向间隔，单位px，默认为10，
+      itemGap: 30,
+      // 副标题文本样式设置
+      subtextStyle: {
+        fontWeight: 'bold',
+        fontSize: 14,
+        color: 'white',
+      }
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '0%',
+      right: '25%',
+      bottom: '4%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'value',
+      max: 100,
+      axisLine: {
+        show: false
+      },
+      axisTick: {
+        show: false
+      },
+      axisLabel:{
+        show: false
+      }, //显示x轴的数值
+      splitLine: {
+        show: false
+      },
+      boundaryGap: ['5%', '50%'],//留白大小，坐标轴两边留白
+    },
+    yAxis: {
+      type: 'category',
+      data: category,
+      //升序
+      inverse: true,
+      axisLabel: {
+        show: false
+      },
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color:"#10306BA5",//线条颜色
+          type:"dashed"//线条样式，默认是实现，dashed是虚线
+        },
+      },
+      axisTick: {
+        show: false
+      },
+      offset: 10,
+      nameTextStyle: {
+        fontSize: 15
+      },
+      // boundaryGap: ['5%', '20%'],//留白大小，坐标轴两边留白
+    },
+    series: [
+      {
+        name: '百分比',
+        type: 'bar',
+        data: barData,
+        barWidth: 10,
+        barGap: 10,
+        smooth: true,
+        label: {
+          normal: {
+            show: true,
+            position: 'right',
+            // offset: [1, -10],
+            textStyle: {
+              // color: '#F68300',
+              color: 'white',
+              fontSize: 13
+            },
+            formatter: function (params){
+              let p = params.data
+              return `${p}%`;
+            }
+          }
+        },
+        itemStyle: {
+          emphasis: {
+            // barBorderRadius: 7
+          },
+          normal: {
+            // barBorderRadius: 7,
+            // color: new echarts.graphic.LinearGradient(
+            //     0, 0, 1, 0,
+            //     [
+            //       {offset: 0, color: '#5994ff'},
+            //       // {offset: 1, color: '#37BBF8'}
+            //     ]
+            // )
+
+            color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [{
+              offset: 0,
+              color: 'rgb(15,45,243)'
+            }, {
+              offset: 1,
+              color: 'rgba(15,87,243,0)'
+            }]),
+            borderWidth: 2,
+            barBorderRadius:15
+          }
+        }
+      }
+    ]
+  };
+
+  option && myChart.setOption(option);
+
+  return myChart;
+}
+
+// 申报情况
 function initChart2(){
   const myChart = init(document.getElementById('bar') as HTMLDivElement)
 
@@ -809,10 +1226,20 @@ nextTick(()=>{
               <div class="main-left-bottom">
                 <div class="title-box">
                   <div class="title">
-                  缴费人数情况
+                  申报情况
                   </div>
                 </div>
-                <div id="bar"></div>
+                <el-row id="bar">
+                  <el-col :span="10">
+                    <div class="col-xxl-6 htongjitu" id="htongjitu1"></div>
+                  </el-col>
+                  <el-col :span="7">
+                    <div class="col-xxl-3 htongjitu" id="htongjitu2"></div>
+                  </el-col>
+                  <el-col :span="7">
+                    <div class="col-xxl-3 htongjitu" id="htongjitu3"></div>
+                  </el-col>
+                </el-row>
               </div>
             </el-col>
             <el-col :span="24" class="main-right">
@@ -1244,8 +1671,16 @@ nextTick(()=>{
             #bar {
               background-image: url("@/assets/img/box框.png");
               background-size: 100% 100%;
-              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
               flex: 1;
+              white-space: nowrap; // 指定元素内部的文本内容是否可以换行,它的作用是阻止元素中的文本换行
+              display: flex;
+              flex-direction: row;
+              .el-col{
+                flex: 1;
+                .htongjitu{
+                  height: 100%;
+                }
+              }
             }
           }
         }

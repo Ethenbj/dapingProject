@@ -1,37 +1,44 @@
-
-/**
- * 大数字转换，将大额数字转换为万、千万、亿等
- * @param value 数字值
- */
-// @ts-ignore
-export function bigNumberTransform (value) {
+// src/index.ts
+// 单位转换
+export default function danwei_zhuanhuan(value:number,type:string) {
     const newValue = ['', '', '']
     let fr = 1000
     let num = 3
     let text1 = ''
+    let text2 = ''
     let fm = 1
+    if(value==null || isNaN(value)){
+        return !type?newValue:''
+    }
+    if(value<0){
+        value = Math.abs(value);
+        text2 = '-'
+    }
     while (value / fr >= 1) {
         fr *= 10
         num += 1
         // console.log('数字', value / fr, 'num:', num)
     }
     if (num <= 4) { // 千
-        newValue[0] = parseInt(value / 1000) + ''
-        newValue[1] = '千'
+        newValue[0] = value.toString()
+        newValue[1] = ''
     } else if (num <= 8) { // 万
-        text1 = parseInt(num - 4) / 3 > 1 ? '千万' : '万'
+        // text1 = parseInt(num - 4) / 3 > 1 ? '千万' : '万'
+        text1 = '万'
         // tslint:disable-next-line:no-shadowed-variable
         fm = text1 === '万' ? 10000 : 10000000
         if (value % fm === 0) {
-            newValue[0] = parseInt(value / fm) + ''
+            newValue[0] = parseInt((value / fm).toString()) + ''
         } else {
-            newValue[0] = parseFloat(value / fm).toFixed(2) + ''
+            newValue[0] = parseFloat((value / fm).toString()).toFixed(2) + ''
         }
         newValue[1] = text1
-    } else if (num <= 16) { // 亿
-        text1 = (num - 8) / 3 > 1 ? '千亿' : '亿'
+    } else { // 亿 if (num <= 16)
+        // text1 = (num - 8) / 3 > 1 ? '千亿' : '亿'
+        text1 = '亿'
         text1 = (num - 8) / 4 > 1 ? '万亿' : text1
         text1 = (num - 8) / 7 > 1 ? '千万亿' : text1
+        text1 = (num - 8) / 10 > 1 ? '亿亿' : text1
         // tslint:disable-next-line:no-shadowed-variable
         fm = 1
         if (text1 === '亿') {
@@ -42,17 +49,21 @@ export function bigNumberTransform (value) {
             fm = 1000000000000
         } else if (text1 === '千万亿') {
             fm = 1000000000000000
+        }else{
+            fm = 1000000000000000000
         }
         if (value % fm === 0) {
-            newValue[0] = parseInt(value / fm) + ''
+            newValue[0] = parseInt((value / fm).toString()) + ''
         } else {
-            newValue[0] = parseFloat(value / fm).toFixed(2) + ''
+            newValue[0] = parseFloat((value / fm).toString()).toFixed(2) + ''
         }
         newValue[1] = text1
     }
     if (value < 1000) {
         newValue[0] = value + ''
-        newValue[1] = ''
+        newValue[1] = '元'
     }
-    return newValue.join('')
+    newValue[0] = text2?text2 + newValue[0] : newValue[0]
+    return !type?newValue:(newValue[0] + newValue[1])
 }
+ 
